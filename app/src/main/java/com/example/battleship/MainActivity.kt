@@ -1,20 +1,25 @@
 package com.example.battleship
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
+//import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // get reference to the main button play
+        // Get reference to the main button play.
+        findViewById<Button>(R.id.btn_main_play).setOnClickListener {
         // set listener (Toast)
         // and show
-        findViewById<Button>(R.id.btn_main_play).setOnClickListener {
-            Toast.makeText(this, "Game over", Toast.LENGTH_LONG).show()
+        //          Toast.makeText(this, "Game over", Toast.LENGTH_LONG).show()
+            // Open to SetPlayersActivity.
+            val intent = Intent(this, SetPlayersActivity::class.java)
+            // Start activity.
+            startActivity(intent)
         }
     }
 }
