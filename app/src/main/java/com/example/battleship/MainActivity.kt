@@ -13,9 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         // Get reference to the main button play.
         findViewById<Button>(R.id.btn_main_play).setOnClickListener {
-        // set listener (Toast)
-        // and show
-        //          Toast.makeText(this, "Game over", Toast.LENGTH_LONG).show()
             // Open to SetPlayersActivity.
             val intent = Intent(this, SetPlayersActivity::class.java)
             // Start activity.
