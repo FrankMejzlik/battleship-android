@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">battleship</string>
+    <string name="hint_username1">player 1 name</string>
+    <string name="hint_username2">player 2 name</string>
 </resources>

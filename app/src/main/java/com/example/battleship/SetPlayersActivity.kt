@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 class SetPlayersActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_set_players)
 
-        findViewById<Button>(R.id.btn_main_play).setOnClickListener {
+        findViewById<Button>(R.id.btn_start).setOnClickListener {
             // set listener (Toast)
             // and show
             Toast.makeText(this, "Game over", Toast.LENGTH_LONG).show()
