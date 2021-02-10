@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".main.MainActivity">
 
     <fragment
-        class="com.example.battleship.MainFragment"
+        class="com.example.battleship.main.MainFragment"
         android:tag="MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

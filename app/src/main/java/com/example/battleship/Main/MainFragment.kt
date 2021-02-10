@@ -1,12 +1,13 @@
-package com.example.battleship
+package com.example.battleship.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.example.battleship.R
+import com.example.battleship.setPlayers.SetPlayersActivity
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
@@ -21,7 +22,6 @@ class MainFragment : Fragment() {
             val intent = Intent(activity, SetPlayersActivity::class.java)
             // Start activity.
             startActivity(intent)
-
         }
 
     }
