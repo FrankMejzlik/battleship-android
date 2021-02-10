@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
+
 //import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +19,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SetPlayersActivity::class.java)
             // Start activity.
             startActivity(intent)
+
         }
     }
 }
