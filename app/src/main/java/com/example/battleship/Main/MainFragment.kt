@@ -23,6 +23,5 @@ class MainFragment : Fragment() {
             // Start activity.
             startActivity(intent)
         }
-
     }
 }

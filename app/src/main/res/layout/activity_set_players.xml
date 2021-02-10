@@ -6,13 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".setPlayers.SetPlayersActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <fragment
+        class="com.example.battleship.setPlayers.SetPlayersFragment"
+        android:tag="SetPlayersFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.Battleship.AppBarOverlay">
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <include layout="@layout/content_set_players" />
+        android:layout_height="match_parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
