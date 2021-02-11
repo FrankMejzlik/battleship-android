@@ -1,6 +1,6 @@
 package com.example.battleship.setPlayers
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import com.example.battleship.R
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_set_players.*
+import java.io.IOException
 
+const val fileNames = "playersNames"
 
 class SetPlayersFragment : Fragment() {
     // Store players names
@@ -22,7 +24,11 @@ class SetPlayersFragment : Fragment() {
         txt_player2
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_set_players, container, true)
     }
 
@@ -36,10 +42,35 @@ class SetPlayersFragment : Fragment() {
         btn_start.setOnClickListener {
             // set listener (Toast)
             // and show
-            Toast.makeText(activity, "Game over", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, readNames(), Toast.LENGTH_LONG).show()
+            saveNames()
         }
     }
 
+    private fun readNames(): String {
+        return try {
+            context?.openFileInput(fileNames)?.bufferedReader()?.useLines { lines ->
+                lines.fold("") { some, text ->
+                    "$some\n$text"
+                }
+            }.toString()
+        }
+        catch (e: Exception) {
+            e.printStackTrace().toString()
+        }
+    }
+
+    private fun saveNames() {
+        try {
+            context?.openFileOutput(fileNames, Context.MODE_PRIVATE).use {
+                it?.write(txtPlayer1.editText?.text.toString().toByteArray())
+                it?.write(txtPlayer2.editText?.text.toString().toByteArray())
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(KEY_PLAYER1, txtPlayer1.editText?.text.toString())
@@ -47,7 +78,7 @@ class SetPlayersFragment : Fragment() {
     }
 
     companion object {
-        const val KEY_PLAYER1 = "player 1"
-        const val KEY_PLAYER2 = "player 2"
+        const val KEY_PLAYER1 = "player1"
+        const val KEY_PLAYER2 = "player2"
     }
 }
