@@ -1,6 +1,7 @@
 package com.example.battleship.setPlayers
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,10 @@ import com.example.battleship.R
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_set_players.*
 import java.io.IOException
+import com.example.battleship.constants
+import com.example.battleship.middleScreen.MiddleScreenActivity
+import com.example.battleship.middleScreen.MiddleScreenFragment
 
-const val fileNames = "playersNames"
 
 class SetPlayersFragment : Fragment() {
     // Store players names
@@ -40,16 +43,20 @@ class SetPlayersFragment : Fragment() {
         }
 
         btn_start.setOnClickListener {
-            // set listener (Toast)
-            // and show
-            Toast.makeText(activity, readNames(), Toast.LENGTH_LONG).show()
             saveNames()
+            Toast.makeText(activity, "Names were saved:" + readNames(), Toast.LENGTH_LONG).show()
+            val name = txtPlayer1.editText?.text.toString()
+            val button = "Place"
+            val intent = Intent(activity, MiddleScreenActivity::class.java)
+            intent.putExtra(MiddleScreenFragment.KEY_NAME, name)
+            intent.putExtra(MiddleScreenFragment.KEY_BUTTON, button)
+            startActivity(intent)
         }
     }
 
     private fun readNames(): String {
         return try {
-            context?.openFileInput(fileNames)?.bufferedReader()?.useLines { lines ->
+            context?.openFileInput(constants.fileNames)?.bufferedReader()?.useLines { lines ->
                 lines.fold("") { some, text ->
                     "$some\n$text"
                 }
@@ -62,7 +69,7 @@ class SetPlayersFragment : Fragment() {
 
     private fun saveNames() {
         try {
-            context?.openFileOutput(fileNames, Context.MODE_PRIVATE).use {
+            context?.openFileOutput(constants.fileNames, Context.MODE_PRIVATE).use {
                 it?.write(txtPlayer1.editText?.text.toString().toByteArray())
                 it?.write(txtPlayer2.editText?.text.toString().toByteArray())
             }
