@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.battleship.Constants
 import com.example.battleship.R
 import kotlinx.android.synthetic.main.fragment_middle_screen.*
+import java.io.Serializable
 
 class MiddleScreenFragment: Fragment() {
 
@@ -20,23 +21,21 @@ class MiddleScreenFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
-        playerName = arguments?.getString(KEY_NAME).orEmpty()
-        buttonAction = arguments?.getString(KEY_BUTTON).orEmpty()
+        playerName = arguments?.getSerializable(Constants.KEY_PLAYER_ID)?.toString()
+        buttonAction = arguments?.getSerializable(Constants.KEY_BUTTON_ACT)?.toString()
         txt_player_name.text = playerName
         btn_action.text = buttonAction
     }
 
     companion object {
-        var KEY_NAME = "playerName"
-        var KEY_BUTTON = "buttonAction"
 
         // Factory method to create fragment instance. Framework requires empty default constructor.
         @JvmStatic
-        fun newInstance(name: String, button: String): MiddleScreenFragment {
+        fun newInstance(name: Serializable?, button: Serializable?): MiddleScreenFragment {
             val fragment = MiddleScreenFragment()
             fragment.arguments = Bundle().apply {
-                putString(KEY_NAME, name)
-                putString(KEY_BUTTON, button)
+                putSerializable(Constants.KEY_PLAYER_ID, name)
+                putSerializable(Constants.KEY_BUTTON_ACT, button)
             }
             return fragment
         }

@@ -11,10 +11,8 @@ import androidx.fragment.app.Fragment
 import com.example.battleship.R
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_set_players.*
-import java.io.IOException
-import com.example.battleship.constants
+import com.example.battleship.Constants
 import com.example.battleship.middleScreen.MiddleScreenActivity
-import com.example.battleship.middleScreen.MiddleScreenFragment
 
 
 class SetPlayersFragment : Fragment() {
@@ -45,18 +43,18 @@ class SetPlayersFragment : Fragment() {
         btn_start.setOnClickListener {
             saveNames()
             Toast.makeText(activity, "Names were saved:" + readNames(), Toast.LENGTH_LONG).show()
-            val name = txtPlayer1.editText?.text.toString()
-            val button = "Place"
+            val name = Constants.Indices.FIRST //txtPlayer1.editText?.text.toString()
+            val button = Constants.ButtonActions.PLACE //"Place"
             val intent = Intent(activity, MiddleScreenActivity::class.java)
-            intent.putExtra(MiddleScreenFragment.KEY_NAME, name)
-            intent.putExtra(MiddleScreenFragment.KEY_BUTTON, button)
+            intent.putExtra(Constants.KEY_PLAYER_ID, name)
+            intent.putExtra(Constants.KEY_BUTTON_ACT, button)
             startActivity(intent)
         }
     }
 
     private fun readNames(): String {
         return try {
-            context?.openFileInput(constants.fileNames)?.bufferedReader()?.useLines { lines ->
+            context?.openFileInput(Constants.fileNames)?.bufferedReader()?.useLines { lines ->
                 lines.fold("") { some, text ->
                     "$some\n$text"
                 }
@@ -69,7 +67,7 @@ class SetPlayersFragment : Fragment() {
 
     private fun saveNames() {
         try {
-            context?.openFileOutput(constants.fileNames, Context.MODE_PRIVATE).use {
+            context?.openFileOutput(Constants.fileNames, Context.MODE_PRIVATE).use {
                 it?.write(txtPlayer1.editText?.text.toString().toByteArray())
                 it?.write("\n".toByteArray())
                 it?.write(txtPlayer2.editText?.text.toString().toByteArray())
