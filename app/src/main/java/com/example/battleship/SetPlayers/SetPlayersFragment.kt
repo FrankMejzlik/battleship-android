@@ -71,6 +71,7 @@ class SetPlayersFragment : Fragment() {
         try {
             context?.openFileOutput(constants.fileNames, Context.MODE_PRIVATE).use {
                 it?.write(txtPlayer1.editText?.text.toString().toByteArray())
+                it?.write("\n".toByteArray())
                 it?.write(txtPlayer2.editText?.text.toString().toByteArray())
             }
         }
