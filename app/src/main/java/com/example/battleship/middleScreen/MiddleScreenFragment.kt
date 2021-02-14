@@ -29,10 +29,19 @@ class MiddleScreenFragment: Fragment() {
 
         viewModel.loadNames()
 
-        val playerName = viewModel.getName(arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices)
-        val buttonAction = arguments?.getSerializable(Constants.KEY_BUTTON_ACT)?.toString()
-        txt_player_name.text = playerName.value
-        btn_action.text = buttonAction
+        val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
+        val playerName = viewModel.getName(playerID)
+        val buttonAction = arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions
+        val playerText = when(playerID){
+            Constants.Indices.FIRST -> "First player: " + playerName.value
+            Constants.Indices.SECOND -> "Second player: " + playerName.value
+        }
+        val buttonText = when(buttonAction) {
+            Constants.ButtonActions.PLACE -> "Place ships"
+            Constants.ButtonActions.PLAY -> "Play"
+        }
+        txt_player_name.text = playerText
+        btn_action.text = buttonText
     }
 
     companion object {

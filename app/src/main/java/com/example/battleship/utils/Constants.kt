@@ -14,7 +14,7 @@ object Constants {
         FIRST, SECOND
     }
     // Actions of the buttons in the middle screen.
-    public enum class ButtonActions(a: String) {
-        PLACE("Place"), PLAY("Play"),
+    public enum class ButtonActions {
+        PLACE, PLAY,
     }
 }
