@@ -1,6 +1,5 @@
 package com.example.battleship.setPlayers
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,14 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import com.example.battleship.PlayersNamesViewModel
+import com.example.battleship.PlayersNamesViewModelFactory
 import com.example.battleship.R
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_set_players.*
-import com.example.battleship.Constants
+import com.example.battleship.utils.Constants
 import com.example.battleship.middleScreen.MiddleScreenActivity
 
 
 class SetPlayersFragment : Fragment() {
+
+    private lateinit var viewModel: PlayersNamesViewModel
+    private lateinit var viewModelFactory: PlayersNamesViewModelFactory
+
+
     // Store players names
     private val txtPlayer1: TextInputLayout by lazy {
         txt_player1
@@ -25,11 +33,9 @@ class SetPlayersFragment : Fragment() {
         txt_player2
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewModelFactory = PlayersNamesViewModelFactory(activity?.application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(PlayersNamesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_set_players, container, true)
     }
 
@@ -53,30 +59,15 @@ class SetPlayersFragment : Fragment() {
     }
 
     private fun readNames(): String {
-        return try {
-            context?.openFileInput(Constants.fileNames)?.bufferedReader()?.useLines { lines ->
-                lines.fold("") { some, text ->
-                    "$some\n$text"
-                }
-            }.toString()
-        }
-        catch (e: Exception) {
-            e.printStackTrace().toString()
-        }
+        viewModel.loadNames()
+        return viewModel.getName(Constants.Indices.FIRST).value +
+                viewModel.getName(Constants.Indices.SECOND).value
     }
 
     private fun saveNames() {
-        try {
-            context?.openFileOutput(Constants.fileNames, Context.MODE_PRIVATE).use {
-                it?.write(txtPlayer1.editText?.text.toString().toByteArray())
-                it?.write("\n".toByteArray())
-                it?.write(txtPlayer2.editText?.text.toString().toByteArray())
-            }
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-        }
+        viewModel.saveNames(txtPlayer1.editText?.text.toString(), txtPlayer2.editText?.text.toString())
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(KEY_PLAYER1, txtPlayer1.editText?.text.toString())

@@ -5,25 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.battleship.Constants
+import androidx.lifecycle.ViewModelProvider
+import com.example.battleship.PlayersNamesViewModel
+import com.example.battleship.PlayersNamesViewModelFactory
+import com.example.battleship.utils.Constants
 import com.example.battleship.R
 import kotlinx.android.synthetic.main.fragment_middle_screen.*
 import java.io.Serializable
 
 class MiddleScreenFragment: Fragment() {
 
-    var playerName: String? = null
-    var buttonAction: String? = null
+    private lateinit var viewModel: PlayersNamesViewModel
+    private lateinit var viewModelFactory: PlayersNamesViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewModelFactory = PlayersNamesViewModelFactory(activity?.application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(PlayersNamesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_middle_screen, container, false)
     }
 
     override fun onStart() {
         super.onStart()
-        playerName = arguments?.getSerializable(Constants.KEY_PLAYER_ID)?.toString()
-        buttonAction = arguments?.getSerializable(Constants.KEY_BUTTON_ACT)?.toString()
-        txt_player_name.text = playerName
+
+        viewModel.loadNames()
+
+        val playerName = viewModel.getName(arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices)
+        val buttonAction = arguments?.getSerializable(Constants.KEY_BUTTON_ACT)?.toString()
+        txt_player_name.text = playerName.value
         btn_action.text = buttonAction
     }
 

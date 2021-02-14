@@ -1,4 +1,4 @@
-package com.example.battleship
+package com.example.battleship.utils
 
 object Constants {
     // Name of the file where names of players are stored.

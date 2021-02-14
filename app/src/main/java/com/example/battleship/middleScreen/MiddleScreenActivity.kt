@@ -2,7 +2,7 @@ package com.example.battleship.middleScreen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.battleship.Constants
+import com.example.battleship.utils.Constants
 import com.example.battleship.R
 
 class MiddleScreenActivity : AppCompatActivity() {
