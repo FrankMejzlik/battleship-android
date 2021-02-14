@@ -1,9 +1,8 @@
-package com.example.battleship
+package com.example.battleship.playersNames
 
 import android.app.Application
 import com.example.battleship.utils.Constants
 import android.content.Context
-import android.content.ContextWrapper
 
 class PlayersNames(application: Application?) {
 

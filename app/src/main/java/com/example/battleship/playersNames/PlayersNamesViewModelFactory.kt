@@ -1,4 +1,4 @@
-package com.example.battleship
+package com.example.battleship.playersNames
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

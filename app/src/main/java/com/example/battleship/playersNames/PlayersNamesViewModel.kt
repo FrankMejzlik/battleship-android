@@ -1,17 +1,15 @@
-package com.example.battleship
+package com.example.battleship.playersNames
 
 import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.battleship.playersNames.PlayersNames
 import com.example.battleship.utils.Constants
-import com.example.battleship.utils.ViewModelResponseState
 
 class PlayersNamesViewModel(app: Application?): ViewModel() {
 
-    private val playersNames: PlayersNames by lazy { PlayersNames(app)}
+    private val playersNames: PlayersNames by lazy { PlayersNames(app) }
 
     private val _player1Name = MutableLiveData<String>()
 
