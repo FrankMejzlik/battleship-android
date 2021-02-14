@@ -1,4 +1,4 @@
-package com.example.battleship.playersNames
+package com.example.battleship.playersNamesViewModel
 
 import android.app.Application
 import com.example.battleship.utils.Constants
