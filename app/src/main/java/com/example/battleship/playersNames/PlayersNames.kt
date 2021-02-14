@@ -46,5 +46,7 @@ class PlayersNames(application: Application?) {
         catch (e: Exception) {
             e.printStackTrace()
         }
+        _player1Name = name1
+        _player2Name = name2
     }
 }

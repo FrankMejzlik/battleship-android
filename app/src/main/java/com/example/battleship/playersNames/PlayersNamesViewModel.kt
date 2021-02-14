@@ -29,6 +29,8 @@ class PlayersNamesViewModel(app: Application?): ViewModel() {
 
     fun saveNames(name1: String, name2: String) {
         playersNames.saveNames(name1, name2)
+        _player1Name.value = name1
+        _player2Name.value = name2
     }
 
 }

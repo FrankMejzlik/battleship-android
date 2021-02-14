@@ -58,7 +58,7 @@ class SetPlayersFragment : Fragment() {
     }
 
     private fun readNames(): String {
-        viewModel.loadNames()
+        //viewModel.loadNames()
         return viewModel.getName(Constants.Indices.FIRST).value +
                 viewModel.getName(Constants.Indices.SECOND).value
     }
