@@ -24,6 +24,6 @@ object Constants {
     }
 
     public enum class FieldStates {
-        EMPTY, SHIP, HIT, HITSHIP
+        EMPTY, SHIP, MISS, HIT
     }
 }
