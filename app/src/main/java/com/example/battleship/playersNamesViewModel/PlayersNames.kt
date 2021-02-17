@@ -13,9 +13,8 @@ class PlayersNames(application: Application?) {
 
     init {
         val names = try {
-            val file = File(app?.applicationContext?.filesDir.toString() + Constants.fileNames)
-            if(!file.exists())
-                file.createNewFile()
+            val file = File(app?.applicationContext?.filesDir.toString() + "/" + Constants.fileNames)
+            file.createNewFile()
 
             app?.applicationContext?.openFileInput(Constants.fileNames)?.bufferedReader()?.useLines { lines ->
                 lines.fold("") { some, text ->
@@ -26,9 +25,15 @@ class PlayersNames(application: Application?) {
         catch (e: Exception) {
             e.printStackTrace().toString()
         }
-        val splittedNames = names.split('\n')
-        _player1Name = splittedNames[1]
-        _player2Name = splittedNames[2]
+        val splittedNames = names.split('\n').filter ( { it ->
+            it.isNotEmpty()
+        });
+
+        if (splittedNames.size >= 2) {
+            _player1Name = splittedNames[0]
+            _player2Name = splittedNames[1]
+        }
+
     }
 
     fun getName(index: Constants.Indices): String
