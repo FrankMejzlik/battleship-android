@@ -15,7 +15,7 @@ import com.example.battleship.placeShips.PlaceShipsActivity
 import kotlinx.android.synthetic.main.fragment_middle_screen.*
 import java.io.Serializable
 
-class MiddleScreenFragment: Fragment() {
+class MiddleScreenFragment : Fragment() {
 
     private lateinit var viewModel: PlayersNamesViewModel
     private lateinit var viewModelFactory: PlayersNamesViewModelFactory
@@ -34,11 +34,11 @@ class MiddleScreenFragment: Fragment() {
         val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
         val playerName = viewModel.getName(playerID)
         val buttonAction = arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions
-        val playerText = when(playerID){
+        val playerText = when (playerID) {
             Constants.Indices.FIRST -> "First player: " + playerName.value
             Constants.Indices.SECOND -> "Second player: " + playerName.value
         }
-        val buttonText = when(buttonAction) {
+        val buttonText = when (buttonAction) {
             Constants.ButtonActions.PLACE -> "Place ships"
             Constants.ButtonActions.PLAY -> "Play"
         }

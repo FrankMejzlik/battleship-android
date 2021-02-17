@@ -11,6 +11,7 @@ object Constants {
 
     // Name of the key for index of the player. (for bundles in intents)
     const val KEY_PLAYER_ID = "playerID"
+
     // Name of the key for action of the button. (for bundles in intents)
     const val KEY_BUTTON_ACT = "buttonAct"
 
@@ -18,6 +19,7 @@ object Constants {
     enum class Indices {
         FIRST, SECOND
     }
+
     // Actions of the buttons in the middle screen.
     public enum class ButtonActions {
         PLACE, PLAY

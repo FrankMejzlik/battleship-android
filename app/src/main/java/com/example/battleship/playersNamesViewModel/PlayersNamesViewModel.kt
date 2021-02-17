@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.battleship.utils.Constants
 
-class PlayersNamesViewModel(app: Application?): ViewModel() {
+class PlayersNamesViewModel(app: Application?) : ViewModel() {
 
     private val playersNames: PlayersNames by lazy { PlayersNames(app) }
 
@@ -20,7 +20,7 @@ class PlayersNamesViewModel(app: Application?): ViewModel() {
     }
 
     fun getName(index: Constants.Indices): LiveData<String> {
-        return when(index){
+        return when (index) {
             Constants.Indices.FIRST -> _player1Name
             Constants.Indices.SECOND -> _player2Name
         }

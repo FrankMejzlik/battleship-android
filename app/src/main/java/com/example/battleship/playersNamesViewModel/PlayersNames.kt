@@ -21,13 +21,12 @@ class PlayersNames(application: Application?) {
                     "$some\n$text"
                 }
             }.toString()
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace().toString()
         }
-        val splittedNames = names.split('\n').filter ( { it ->
+        val splittedNames = names.split('\n').filter {
             it.isNotEmpty()
-        });
+        }
 
         if (splittedNames.size >= 2) {
             _player1Name = splittedNames[0]
@@ -36,9 +35,8 @@ class PlayersNames(application: Application?) {
 
     }
 
-    fun getName(index: Constants.Indices): String
-    {
-        return when(index){
+    fun getName(index: Constants.Indices): String {
+        return when (index) {
             Constants.Indices.FIRST -> _player1Name
             Constants.Indices.SECOND -> _player2Name
         }
@@ -51,8 +49,7 @@ class PlayersNames(application: Application?) {
                 it?.write("\n".toByteArray())
                 it?.write(name2.toByteArray())
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         _player1Name = name1

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.battleship.R
 import com.example.battleship.utils.Constants
 
-class PlaceShipsActivity: AppCompatActivity() {
+class PlaceShipsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

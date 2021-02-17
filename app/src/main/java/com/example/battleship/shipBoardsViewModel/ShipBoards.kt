@@ -9,7 +9,8 @@ class ShipBoards(application: Application?) {
     private lateinit var _board: Board
     private val app = application
 
-    init {}
+    init {
+    }
 
     fun getBoard(): Board {
         return _board

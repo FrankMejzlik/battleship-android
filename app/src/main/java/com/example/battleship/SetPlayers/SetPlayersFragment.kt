@@ -40,7 +40,7 @@ class SetPlayersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Save names of players into current started instance from onSaveInstanceState
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             txtPlayer1.editText?.setText(savedInstanceState.getString(KEY_PLAYER1))
             txtPlayer2.editText?.setText(savedInstanceState.getString(KEY_PLAYER2))
         }

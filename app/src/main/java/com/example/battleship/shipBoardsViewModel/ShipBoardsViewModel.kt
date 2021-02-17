@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.battleship.utils.Board
 import com.example.battleship.utils.Constants
 
-class ShipBoardsViewModel(app: Application?): ViewModel() {
+class ShipBoardsViewModel(app: Application?) : ViewModel() {
     private val shipBoards: ShipBoards by lazy { ShipBoards(app) }
 
     private val _board = MutableLiveData<Board>()
