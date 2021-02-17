@@ -9,8 +9,8 @@ class MiddleScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_middle_screen)
-        val playerName = intent.getSerializableExtra(Constants.KEY_PLAYER_ID)//intent.getStringExtra(MiddleScreenFragment.KEY_NAME).orEmpty()
-        val buttonAction = intent.getSerializableExtra(Constants.KEY_BUTTON_ACT)//intent.getStringExtra(MiddleScreenFragment.KEY_BUTTON).orEmpty()
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container, MiddleScreenFragment.newInstance(playerName, buttonAction)).commit()
+        val playerID = intent.getSerializableExtra(Constants.KEY_PLAYER_ID)
+        val buttonAction = intent.getSerializableExtra(Constants.KEY_BUTTON_ACT)
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, MiddleScreenFragment.newInstance(playerID, buttonAction)).commit()
     }
 }

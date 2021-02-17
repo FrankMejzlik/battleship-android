@@ -1,5 +1,6 @@
 package com.example.battleship.middleScreen
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import com.example.battleship.playersNamesViewModel.PlayersNamesViewModel
 import com.example.battleship.playersNamesViewModel.PlayersNamesViewModelFactory
 import com.example.battleship.utils.Constants
 import com.example.battleship.R
+import com.example.battleship.placeShips.PlaceShipsActivity
 import kotlinx.android.synthetic.main.fragment_middle_screen.*
 import java.io.Serializable
 
@@ -42,16 +44,23 @@ class MiddleScreenFragment: Fragment() {
         }
         txt_player_name.text = playerText
         btn_action.text = buttonText
+
+        btn_action.setOnClickListener {
+            val intent = Intent(activity, PlaceShipsActivity::class.java)
+            intent.putExtra(Constants.KEY_PLAYER_ID, playerID)
+            startActivity(intent)
+        }
+
     }
 
     companion object {
 
         // Factory method to create fragment instance. Framework requires empty default constructor.
         @JvmStatic
-        fun newInstance(name: Serializable?, button: Serializable?): MiddleScreenFragment {
+        fun newInstance(id: Serializable?, button: Serializable?): MiddleScreenFragment {
             val fragment = MiddleScreenFragment()
             fragment.arguments = Bundle().apply {
-                putSerializable(Constants.KEY_PLAYER_ID, name)
+                putSerializable(Constants.KEY_PLAYER_ID, id)
                 putSerializable(Constants.KEY_BUTTON_ACT, button)
             }
             return fragment
