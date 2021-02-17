@@ -3,6 +3,7 @@ package com.example.battleship.playersNamesViewModel
 import android.app.Application
 import com.example.battleship.utils.Constants
 import android.content.Context
+import java.io.File
 
 class PlayersNames(application: Application?) {
 
@@ -12,6 +13,9 @@ class PlayersNames(application: Application?) {
 
     init {
         val names = try {
+            val file = File(app?.applicationContext?.filesDir.toString() + Constants.fileNames)
+            if(!file.exists())
+                file.createNewFile()
 
             app?.applicationContext?.openFileInput(Constants.fileNames)?.bufferedReader()?.useLines { lines ->
                 lines.fold("") { some, text ->
