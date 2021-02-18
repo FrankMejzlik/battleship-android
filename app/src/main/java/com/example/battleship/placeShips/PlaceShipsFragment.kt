@@ -1,29 +1,46 @@
 package com.example.battleship.placeShips
 
-import android.app.ActionBar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.battleship.R
-import com.example.battleship.middleScreen.MiddleScreenFragment
+import com.example.battleship.shipBoardsViewModel.ShipBoardsView
+import com.example.battleship.shipBoardsViewModel.ShipBoardsViewModel
+import com.example.battleship.shipBoardsViewModel.ShipBoardsViewModelFactory
+import com.example.battleship.utils.Cell
 import com.example.battleship.utils.Constants
 import kotlinx.android.synthetic.main.fragment_place_ships.*
 import java.io.Serializable
 
-class PlaceShipsFragment : Fragment() {
+class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
+
+    private lateinit var viewModel: ShipBoardsViewModel
+    private lateinit var viewModelFactory: ShipBoardsViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewModelFactory = ShipBoardsViewModelFactory(activity?.application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ShipBoardsViewModel::class.java)
+        viewModel.shipBoard.selectedCellLiveData.observe(viewLifecycleOwner, Observer {
+            updateSelectedCellUI(it)
+        })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
     }
 
+    private fun updateSelectedCellUI(cell: Cell?) = cell?.let {
+        view_board.updateSelectedCellUI(cell.first, cell.second)
+    }
+
+    override fun onCellTouched(row: Int, col: Int) {
+        viewModel.shipBoard.updateSelectedCell(row, col)
+    }
     override fun onStart() {
         super.onStart()
+
+        view_board.registerListener(this)
 
         // Creating buttons for ship board.
 //        var index = 0

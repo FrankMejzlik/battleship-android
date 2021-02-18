@@ -19,6 +19,8 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     private var selectedRow = -1
     private var selectedCol = -1
 
+    private var listener: ShipBoardsView.OnTouchListener? = null
+
     private val thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
         color = Color.BLACK
@@ -85,8 +87,22 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     private fun handleTouchEvent(x: Float, y: Float) {
-        selectedRow = (y / cellSizePixels).toInt()
-        selectedCol = (x / cellSizePixels).toInt()
+        val possibleSelectedRow = (y / cellSizePixels).toInt()
+        val possibleSelectedCol = (x / cellSizePixels).toInt()
+        listener?.onCellTouched(possibleSelectedRow, possibleSelectedCol)
+    }
+
+    fun updateSelectedCellUI(row: Int, col: Int) {
+        selectedRow = row
+        selectedCol = col
         invalidate()
+    }
+
+    fun registerListener(listener: ShipBoardsView.OnTouchListener) {
+        this.listener = listener
+    }
+
+    interface OnTouchListener {
+        fun onCellTouched(row: Int, col: Int)
     }
 }
