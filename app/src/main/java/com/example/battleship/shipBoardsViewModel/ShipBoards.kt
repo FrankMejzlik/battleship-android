@@ -30,10 +30,19 @@ class ShipBoards(application: Application?) {
         cellsLiveData.postValue(_board.cells)
     }
 
-    fun handleInput(state: Constants.CellStates) {
+    fun handleInput(state: Constants.CellStates, shipSize: Int) {
         if (selectedRow == -1 || selectedCol == -1) return
 
-        _board.getCell(selectedRow, selectedCol).value = state
+        // Check if ship is not out of board.
+        if(Constants.boardSideSize - selectedCol < shipSize) {
+            return
+        }
+
+        // Set all cells of shipSize with given state.
+        for (i in 0 until shipSize) {
+            _board.getCell(selectedRow, selectedCol + i).value = state
+        }
+
         cellsLiveData.postValue(_board.cells)
     }
 

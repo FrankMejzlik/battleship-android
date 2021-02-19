@@ -38,7 +38,15 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
         shipsButtons.forEachIndexed { _, button ->
             button.setOnClickListener {
-                viewModel.shipBoard.handleInput(Constants.CellStates.SHIP)
+                val shipSize =
+                when (button) {
+                    btn_five_ship -> 5
+                    btn_four_ship -> 4
+                    btn_three_ship -> 3
+                    btn_two_ship -> 2
+                    else -> 0
+                }
+                viewModel.shipBoard.handleInput(Constants.CellStates.SHIP, shipSize)
             }
         }
     }
