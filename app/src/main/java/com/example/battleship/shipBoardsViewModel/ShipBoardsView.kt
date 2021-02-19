@@ -95,7 +95,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 val row = cell.row
                 val col = cell.col
                 val stateString = when (cell.value) {
-                    Constants.CellStates.EMPTY -> "e"
+                    Constants.CellStates.EMPTY -> ""
                     Constants.CellStates.HIT -> "X"
                     Constants.CellStates.MISS -> "O"
                     Constants.CellStates.SHIP -> "S"

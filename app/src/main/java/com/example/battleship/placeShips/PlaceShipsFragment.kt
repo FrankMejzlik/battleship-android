@@ -33,6 +33,16 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val shipsButtons = listOf(btn_five_ship, btn_four_ship, btn_three_ship, btn_two_ship)
+
+        shipsButtons.forEachIndexed { _, button ->
+            button.setOnClickListener {
+                viewModel.shipBoard.handleInput(Constants.CellStates.SHIP)
+            }
+        }
+    }
+
     private fun updateCells(cells: BoardArray?) = cells?.let {
         view_board.updateCells(cells)
     }

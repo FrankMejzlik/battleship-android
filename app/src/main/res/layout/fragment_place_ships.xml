@@ -32,8 +32,8 @@
         android:id="@+id/gl_ships"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:rowCount="3"
+        android:columnCount="1"
+        android:rowCount="4"
         android:layout_alignParentBottom="true"
         >
 <!--        app:layout_constraintStart_toStartOf="parent"-->
@@ -42,12 +42,36 @@
 <!--        app:layout_constraintBottom_toBottomOf="parent"-->
 
         <Button
-            android:id="@+id/oneButton"
+            android:id="@+id/btn_five_ship"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="0"
-            android:text="1" />
+            android:text="Carrier (5)" />
+
+        <Button
+            android:id="@+id/btn_four_ship"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:text="Battleship (4)" />
+
+        <Button
+            android:id="@+id/btn_three_ship"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:text="Submarine (3)" />
+
+        <Button
+            android:id="@+id/btn_two_ship"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:text="Destroyer (2)" />
     </GridLayout>
 
     <Button
@@ -56,7 +80,8 @@
         android:layout_height="wrap_content"
         android:text="Ok"
         android:layout_below="@+id/txt_place_ships_player_name"
-        android:layout_toEndOf="@+id/gl_ships"/>
+        android:layout_toEndOf="@+id/gl_ships"
+        />
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintTop_toBottomOf="@id/gl_board"-->
