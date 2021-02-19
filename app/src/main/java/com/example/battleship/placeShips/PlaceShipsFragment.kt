@@ -12,7 +12,8 @@ import com.example.battleship.R
 import com.example.battleship.shipBoardsViewModel.ShipBoardsView
 import com.example.battleship.shipBoardsViewModel.ShipBoardsViewModel
 import com.example.battleship.shipBoardsViewModel.ShipBoardsViewModelFactory
-import com.example.battleship.utils.Cell
+import com.example.battleship.utils.BoardArray
+import com.example.battleship.utils.CellPair
 import com.example.battleship.utils.Constants
 import kotlinx.android.synthetic.main.fragment_place_ships.*
 import java.io.Serializable
@@ -28,10 +29,15 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         viewModel.shipBoard.selectedCellLiveData.observe(viewLifecycleOwner, Observer {
             updateSelectedCellUI(it)
         })
+        viewModel.shipBoard.cellsLiveData.observe(viewLifecycleOwner, Observer { updateCells(it)})
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
     }
 
-    private fun updateSelectedCellUI(cell: Cell?) = cell?.let {
+    private fun updateCells(cells: BoardArray?) = cells?.let {
+        view_board.updateCells(cells)
+    }
+
+    private fun updateSelectedCellUI(cell: CellPair?) = cell?.let {
         view_board.updateSelectedCellUI(cell.first, cell.second)
         if(cell != Pair(-1,-1)) {
             Toast.makeText(

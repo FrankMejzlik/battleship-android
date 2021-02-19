@@ -1,4 +1,6 @@
 package com.example.battleship.utils
 
-typealias Board = Array<Array<Constants.FieldStates>>
-typealias Cell = Pair<Int, Int>
+import com.example.battleship.main.data.Cell
+
+typealias BoardArray = Array<Array<Cell>>
+typealias CellPair = Pair<Int, Int>

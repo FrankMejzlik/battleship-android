@@ -15,6 +15,9 @@ object Constants {
     // Name of the key for action of the button. (for bundles in intents)
     const val KEY_BUTTON_ACT = "buttonAct"
 
+    // Board size
+    const val boardSideSize = 10
+
     // Indices of the players.
     enum class Indices {
         FIRST, SECOND
@@ -25,7 +28,8 @@ object Constants {
         PLACE, PLAY
     }
 
-    public enum class FieldStates {
+    // Values of cells in the board.
+    public enum class CellStates {
         EMPTY, SHIP, MISS, HIT
     }
 }
