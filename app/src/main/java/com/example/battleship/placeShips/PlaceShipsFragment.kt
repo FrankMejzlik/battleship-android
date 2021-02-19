@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +33,13 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
     private fun updateSelectedCellUI(cell: Cell?) = cell?.let {
         view_board.updateSelectedCellUI(cell.first, cell.second)
+        if(cell != Pair(-1,-1)) {
+            Toast.makeText(
+                activity,
+                "chosen cell is: " + viewModel.shipBoard.selectedCellLiveData.value?.first + ", " + viewModel.shipBoard.selectedCellLiveData.value?.second,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onCellTouched(row: Int, col: Int) {
