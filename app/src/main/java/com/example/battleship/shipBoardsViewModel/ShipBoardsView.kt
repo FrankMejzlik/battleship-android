@@ -61,14 +61,14 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     private fun fillCells(canvas: Canvas) {
-        if(selectedRow == -1 || selectedCol == -1) return
+        if (selectedRow == -1 || selectedCol == -1) return
 
         cells?.forEach { column ->
             column.forEach { cell ->
                 val row = cell.row
                 val col = cell.col
 
-                if(row == selectedRow && col == selectedCol) {
+                if (row == selectedRow && col == selectedCol) {
                     fillCell(canvas, row, col, selectedCellPaint)
                 }
             }
@@ -76,7 +76,13 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     private fun fillCell(canvas: Canvas, r: Int, c: Int, paint: Paint) {
-        canvas.drawRect(c * cellSizePixels, r * cellSizePixels, (c + 1) * cellSizePixels, (r + 1) * cellSizePixels, paint)
+        canvas.drawRect(
+            c * cellSizePixels,
+            r * cellSizePixels,
+            (c + 1) * cellSizePixels,
+            (r + 1) * cellSizePixels,
+            paint
+        )
 
     }
 
@@ -84,8 +90,20 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
         canvas.drawRect(0F, 0F, width.toFloat(), height.toFloat(), thickLinePaint)
 
         for (i in 1 until Constants.boardSideSize) {
-            canvas.drawLine(i * cellSizePixels, 0F, i * cellSizePixels, height.toFloat(), thinLinePaint)
-            canvas.drawLine(0F, i * cellSizePixels, width.toFloat(), i * cellSizePixels, thinLinePaint)
+            canvas.drawLine(
+                i * cellSizePixels,
+                0F,
+                i * cellSizePixels,
+                height.toFloat(),
+                thinLinePaint
+            )
+            canvas.drawLine(
+                0F,
+                i * cellSizePixels,
+                width.toFloat(),
+                i * cellSizePixels,
+                thinLinePaint
+            )
         }
     }
 
@@ -98,7 +116,9 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                     Constants.CellStates.EMPTY -> ""
                     Constants.CellStates.HIT -> "X"
                     Constants.CellStates.MISS -> "O"
+                    Constants.CellStates.SHIP_START -> "H"
                     Constants.CellStates.SHIP -> "S"
+                    null -> return
                 }
 
                 val textBounds = Rect()
@@ -106,8 +126,10 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 val textWidth = textPaint.measureText(stateString)
                 val textHeight = textBounds.height()
 
-                canvas.drawText(stateString, (col * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
-                    (row * cellSizePixels) + cellSizePixels / 2 - textHeight / 2, textPaint)
+                canvas.drawText(
+                    stateString, (col * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
+                    (row * cellSizePixels) + cellSizePixels / 2 - textHeight / 2, textPaint
+                )
 
             }
         }

@@ -20,7 +20,11 @@ class MiddleScreenFragment : Fragment() {
     private lateinit var viewModel: PlayersNamesViewModel
     private lateinit var viewModelFactory: PlayersNamesViewModelFactory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         viewModelFactory = PlayersNamesViewModelFactory(activity?.application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(PlayersNamesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_middle_screen, container, false)
@@ -33,7 +37,8 @@ class MiddleScreenFragment : Fragment() {
 
         val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
         val playerName = viewModel.getName(playerID)
-        val buttonAction = arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions
+        val buttonAction =
+            arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions
         val playerText = when (playerID) {
             Constants.Indices.FIRST -> "First player: " + playerName.value
             Constants.Indices.SECOND -> "Second player: " + playerName.value

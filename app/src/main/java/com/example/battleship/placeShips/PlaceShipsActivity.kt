@@ -11,6 +11,7 @@ class PlaceShipsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_place_ships)
         val playerID = intent.getSerializableExtra(Constants.KEY_PLAYER_ID)
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container, PlaceShipsFragment.newInstance(playerID)).commit()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, PlaceShipsFragment.newInstance(playerID)).commit()
     }
 }

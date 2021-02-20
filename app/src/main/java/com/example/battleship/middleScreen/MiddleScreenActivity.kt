@@ -11,6 +11,8 @@ class MiddleScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_middle_screen)
         val playerID = intent.getSerializableExtra(Constants.KEY_PLAYER_ID)
         val buttonAction = intent.getSerializableExtra(Constants.KEY_BUTTON_ACT)
-        supportFragmentManager.beginTransaction().add(R.id.fragment_container, MiddleScreenFragment.newInstance(playerID, buttonAction)).commit()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, MiddleScreenFragment.newInstance(playerID, buttonAction))
+            .commit()
     }
 }

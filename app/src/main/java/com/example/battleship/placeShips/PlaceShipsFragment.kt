@@ -23,31 +23,41 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     private lateinit var viewModel: ShipBoardsViewModel
     private lateinit var viewModelFactory: ShipBoardsViewModelFactory
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         viewModelFactory = ShipBoardsViewModelFactory(activity?.application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ShipBoardsViewModel::class.java)
         viewModel.shipBoard.selectedCellLiveData.observe(viewLifecycleOwner, Observer {
             updateSelectedCellUI(it)
         })
-        viewModel.shipBoard.cellsLiveData.observe(viewLifecycleOwner, Observer { updateCells(it)})
+        viewModel.shipBoard.cellsLiveData.observe(viewLifecycleOwner, Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Set listeners for placing ships buttons.
         val shipsButtons = listOf(btn_five_ship, btn_four_ship, btn_three_ship, btn_two_ship)
 
         shipsButtons.forEachIndexed { _, button ->
             button.setOnClickListener {
                 val shipSize =
-                when (button) {
-                    btn_five_ship -> 5
-                    btn_four_ship -> 4
-                    btn_three_ship -> 3
-                    btn_two_ship -> 2
-                    else -> 0
-                }
-                viewModel.shipBoard.handleInput(Constants.CellStates.SHIP, shipSize)
+                    when (button) {
+                        btn_five_ship -> 5
+                        btn_four_ship -> 4
+                        btn_three_ship -> 3
+                        btn_two_ship -> 2
+                        else -> 0
+                    }
+                viewModel.shipBoard.handleInput(shipSize, Constants.ShipAction.PLACE)
             }
+        }
+
+        // Set listener for rotate ship button.
+        btn_rotate_ship.setOnClickListener {
+            viewModel.shipBoard.handleInput(0, Constants.ShipAction.ROTATE)
         }
     }
 
@@ -57,7 +67,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
     private fun updateSelectedCellUI(cell: CellPair?) = cell?.let {
         view_board.updateSelectedCellUI(cell.first, cell.second)
-        if(cell != Pair(-1,-1)) {
+        if (cell != Pair(-1, -1)) {
             Toast.makeText(
                 activity,
                 "chosen cell is: " + viewModel.shipBoard.selectedCellLiveData.value?.first + ", " + viewModel.shipBoard.selectedCellLiveData.value?.second,
@@ -69,6 +79,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     override fun onCellTouched(row: Int, col: Int) {
         viewModel.shipBoard.updateSelectedCell(row, col)
     }
+
     override fun onStart() {
         super.onStart()
 

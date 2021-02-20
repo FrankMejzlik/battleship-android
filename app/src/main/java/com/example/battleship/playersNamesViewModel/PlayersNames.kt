@@ -5,22 +5,23 @@ import com.example.battleship.utils.Constants
 import android.content.Context
 import java.io.File
 
-class PlayersNames(application: Application?) {
+class PlayersNames(val app: Application?) {
 
     private var _player1Name = ""
     private var _player2Name = ""
-    private val app = application
 
     init {
         val names = try {
-            val file = File(app?.applicationContext?.filesDir.toString() + "/" + Constants.fileNames)
+            val file =
+                File(app?.applicationContext?.filesDir.toString() + "/" + Constants.fileNames)
             file.createNewFile()
 
-            app?.applicationContext?.openFileInput(Constants.fileNames)?.bufferedReader()?.useLines { lines ->
-                lines.fold("") { some, text ->
-                    "$some\n$text"
-                }
-            }.toString()
+            app?.applicationContext?.openFileInput(Constants.fileNames)?.bufferedReader()
+                ?.useLines { lines ->
+                    lines.fold("") { some, text ->
+                        "$some\n$text"
+                    }
+                }.toString()
         } catch (e: Exception) {
             e.printStackTrace().toString()
         }

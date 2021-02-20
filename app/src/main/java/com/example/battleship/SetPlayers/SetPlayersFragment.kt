@@ -32,7 +32,11 @@ class SetPlayersFragment : Fragment() {
         txt_player2
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         viewModelFactory = PlayersNamesViewModelFactory(activity?.application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(PlayersNamesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_set_players, container, true)
@@ -64,7 +68,10 @@ class SetPlayersFragment : Fragment() {
     }
 
     private fun saveNames() {
-        viewModel.saveNames(txtPlayer1.editText?.text.toString(), txtPlayer2.editText?.text.toString())
+        viewModel.saveNames(
+            txtPlayer1.editText?.text.toString(),
+            txtPlayer2.editText?.text.toString()
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
