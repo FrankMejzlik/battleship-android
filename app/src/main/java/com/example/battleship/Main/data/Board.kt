@@ -13,7 +13,7 @@ class Board(val size: Int, var cells: BoardArray) {
     fun copyCells(): BoardArray {
         return BoardArray(Constants.boardSideSize) { i ->
             Array(Constants.boardSideSize) { j ->
-                Cell(i, j, cells[i][j].value)
+                Cell(i, j, cells[i][j].state, cells[i][j].ship)
             }
         }
     }

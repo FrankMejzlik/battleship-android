@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.battleship.main.data.Board
 import com.example.battleship.main.data.Cell
+import com.example.battleship.main.data.Ship
 import com.example.battleship.utils.BoardArray
 import com.example.battleship.utils.CellPair
 import com.example.battleship.utils.Constants
@@ -26,7 +27,7 @@ class ShipBoards(val app: Application?) {
 
     init {
         val cells = BoardArray(Constants.boardSideSize) { i ->
-            Array(Constants.boardSideSize) { j -> Cell(i, j, Constants.CellStates.EMPTY) }
+            Array(Constants.boardSideSize) { j -> Cell(i, j, Constants.CellStates.EMPTY, null) }
         }
         _board = Board(Constants.boardSideSize * Constants.boardSideSize, cells)
 
@@ -37,14 +38,14 @@ class ShipBoards(val app: Application?) {
     fun handleInput(shipSize: Int, action: Constants.ShipAction) {
         if (selectedRow == -1 || selectedCol == -1) return
 
-        val cellState = _board.getCell(selectedRow, selectedCol)?.value
+        val cellState = _board.getCell(selectedRow, selectedCol)?.state
 
         when (action) {
             Constants.ShipAction.PLACE -> if (cellState == Constants.CellStates.EMPTY) placeShip(
                 shipSize,
                 true
             )
-            Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP || cellState == Constants.CellStates.SHIP_START) rotateShip()
+            Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP) rotateShip()
         }
 
         cellsLiveData.postValue(_board.cells)
@@ -72,9 +73,7 @@ class ShipBoards(val app: Application?) {
             val row = if (isHorizontal) selectedRow else selectedRow + i
             val col = if (isHorizontal) selectedCol + i else selectedCol
 
-            if (_board.getCell(row, col)?.value == Constants.CellStates.SHIP ||
-                _board.getCell(row, col)?.value == Constants.CellStates.SHIP_START
-            ) {
+            if (_board.getCell(row, col)?.state == Constants.CellStates.SHIP) {
                 Toast.makeText(
                     app?.applicationContext,
                     "Other ship is there",
@@ -84,12 +83,14 @@ class ShipBoards(val app: Application?) {
             }
         }
 
-        // Set all cells of shipSize with given state.
+        // Set all cells of shipSize with given state and given type of ship.
+        val ship = Ship(shipSize)
         for (i in 0 until shipSize) {
             val row = if (isHorizontal) selectedRow else selectedRow + i
             val col = if (isHorizontal) selectedCol + i else selectedCol
-            val state = if (i == 0) Constants.CellStates.SHIP_START else Constants.CellStates.SHIP
-            _board.getCell(row, col)?.value = state
+            val state = Constants.CellStates.SHIP
+            _board.getCell(row, col)?.state = state
+            _board.getCell(row, col)?.ship = ship
         }
         return true
     }
@@ -97,15 +98,8 @@ class ShipBoards(val app: Application?) {
     private fun rotateShip() {
         val isHorizontal = isShipHorizontal()
 
-        // Count size of the ship.
-        var shipSize = 1 // Count selected cell.
-        // To the left (or up) from current cell
-        val pair = countCellsAndStartCell(isHorizontal, Direction.LEFT)
-        val startCell = pair.second
-        shipSize += pair.first
-
-        // To the right (or down) from current cell
-        shipSize += countCellsAndStartCell(isHorizontal, Direction.RIGHT).first
+        val startCell = getStartCell(isHorizontal)
+        val shipSize = _board.getCell(selectedRow, selectedCol)?.ship?.size ?: 0
 
         val oldPair = Pair(selectedRow, selectedCol)
         selectedRow = startCell.row
@@ -121,41 +115,29 @@ class ShipBoards(val app: Application?) {
         selectedCol = oldPair.second
     }
 
-    private fun countCellsAndStartCell(isHorizontal: Boolean, dir: Direction): Pair<Int, Cell> {
+    private fun getStartCell(isHorizontal: Boolean): Cell {
         // If current position is start of the boat, return current cell as start cell.
         val currCell = _board.getCell(selectedRow, selectedCol)
-        if (dir == Direction.LEFT)
-            if (currCell?.value == Constants.CellStates.SHIP_START)
-                return Pair(0, currCell)
 
         var index = 1
-        var cellsCount = 0
         while (true) {
             val row = when {
                 isHorizontal -> selectedRow
-                dir == Direction.LEFT -> selectedRow - index
-                else -> selectedRow + index
+                else -> selectedRow - index
             }
 
             val col = when {
                 !isHorizontal -> selectedCol
-                dir == Direction.LEFT -> selectedCol - index
-                else -> selectedCol + index
+                else -> selectedCol - index
             }
 
-            val cellValue = _board.getCell(row, col)?.value
+            val cell = _board.getCell(row, col)
 
-            if (cellValue == Constants.CellStates.SHIP)
-                ++cellsCount
-            else {
-                if (dir == Direction.LEFT) {
-                    if (cellValue == Constants.CellStates.SHIP_START) {
-                        val startRow = if (isHorizontal) selectedRow else selectedRow - index
-                        val startCol = if (isHorizontal) selectedCol - index else selectedCol
-                        return Pair(cellsCount, Cell(startRow, startCol, cellValue))
-                    }
-                }
-                return Pair(cellsCount, Cell(-1, -1, Constants.CellStates.EMPTY))
+            if (cell?.ship != currCell?.ship) {
+                val startRow = if (isHorizontal) selectedRow else selectedRow - index + 1
+                val startCol = if (isHorizontal) selectedCol - index + 1 else selectedCol
+                val startCell = _board.getCell(startRow, startCol)
+                return Cell(startRow, startCol, startCell?.state, startCell?.ship)
             }
 
             ++index
@@ -165,15 +147,8 @@ class ShipBoards(val app: Application?) {
     private fun eraseShip() {
         val isHorizontal = isShipHorizontal()
 
-        // Count size of the ship.
-        var shipSize = 1 // Count selected cell.
-        // To the left (or up) from current cell
-        val pair = countCellsAndStartCell(isHorizontal, Direction.LEFT)
-        val startCell = pair.second
-        shipSize += pair.first
-
-        // To the right (or down) from current cell
-        shipSize += countCellsAndStartCell(isHorizontal, Direction.RIGHT).first
+        val startCell = getStartCell(isHorizontal)
+        val shipSize = _board.getCell(selectedRow, selectedCol)?.ship?.size ?: 0
 
         val oldPair = Pair(selectedRow, selectedCol)
         selectedRow = startCell.row
@@ -184,7 +159,8 @@ class ShipBoards(val app: Application?) {
             val row = if (isHorizontal) selectedRow else selectedRow + i
             val col = if (isHorizontal) selectedCol + i else selectedCol
 
-            _board.getCell(row, col)?.value = Constants.CellStates.EMPTY
+            _board.getCell(row, col)?.state = Constants.CellStates.EMPTY
+            _board.getCell(row, col)?.ship = null
         }
 
         selectedRow = oldPair.first
@@ -192,15 +168,12 @@ class ShipBoards(val app: Application?) {
     }
 
     private fun isShipHorizontal(): Boolean {
-        var valueLeft = _board.getCell(selectedRow, selectedCol - 1)?.value
-        val valueRight = _board.getCell(selectedRow, selectedCol + 1)?.value
+        var shipLeft = _board.getCell(selectedRow, selectedCol - 1)?.ship
+        val shipRight = _board.getCell(selectedRow, selectedCol + 1)?.ship
         val currCell = _board.getCell(selectedRow, selectedCol)
-        if (currCell?.value == Constants.CellStates.SHIP_START)
-            valueLeft = null
 
-        return valueLeft == Constants.CellStates.SHIP ||
-                valueLeft == Constants.CellStates.SHIP_START ||
-                valueRight == Constants.CellStates.SHIP
+        return shipLeft == currCell?.ship ||
+                shipRight == currCell?.ship
     }
 
     fun updateSelectedCell(row: Int, col: Int) {

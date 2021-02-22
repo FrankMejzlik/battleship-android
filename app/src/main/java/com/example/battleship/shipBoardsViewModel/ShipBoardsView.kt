@@ -112,11 +112,10 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
             column.forEach { cell ->
                 val row = cell.row
                 val col = cell.col
-                val stateString = when (cell.value) {
+                val stateString = when (cell.state) {
                     Constants.CellStates.EMPTY -> ""
                     Constants.CellStates.HIT -> "X"
                     Constants.CellStates.MISS -> "O"
-                    Constants.CellStates.SHIP_START -> "H"
                     Constants.CellStates.SHIP -> "S"
                     null -> return
                 }

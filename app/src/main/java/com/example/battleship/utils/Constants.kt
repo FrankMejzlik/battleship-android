@@ -30,7 +30,7 @@ object Constants {
 
     // Values of cells in the board.
     public enum class CellStates {
-        EMPTY, SHIP_START, SHIP, MISS, HIT
+        EMPTY, SHIP, MISS, HIT
     }
 
     // Action of ships on the board.
