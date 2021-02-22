@@ -2,4 +2,11 @@
     <string name="app_name">battleship</string>
     <string name="hint_player1">player1name</string>
     <string name="hint_player2">player2name</string>
+    <string name="btn_place_ok">Ok</string>
+    <string name="btn_ship_erase">Erase</string>
+    <string name="btn_ship_rotate">Rotate</string>
+    <string name="ship_size_2">Destroyer (2)</string>
+    <string name="ship_size_3">Submarine (3)</string>
+    <string name="ship_size_4">Battleship (4)</string>
+    <string name="ship_size_5">Carrier (5)</string>
 </resources>

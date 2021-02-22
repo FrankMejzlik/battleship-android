@@ -59,6 +59,11 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         btn_rotate_ship.setOnClickListener {
             viewModel.shipBoard.handleInput(0, Constants.ShipAction.ROTATE)
         }
+
+        // Set listener for erase ship button.
+        btn_erase_ship.setOnClickListener {
+            viewModel.shipBoard.handleInput(0, Constants.ShipAction.ERASE)
+        }
     }
 
     private fun updateCells(cells: BoardArray?) = cells?.let {

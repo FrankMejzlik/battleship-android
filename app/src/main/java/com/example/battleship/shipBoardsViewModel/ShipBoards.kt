@@ -46,6 +46,7 @@ class ShipBoards(val app: Application?) {
                 true
             )
             Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP) rotateShip()
+            Constants.ShipAction.ERASE -> if (cellState == Constants.CellStates.SHIP) eraseShip()
         }
 
         cellsLiveData.postValue(_board.cells)
