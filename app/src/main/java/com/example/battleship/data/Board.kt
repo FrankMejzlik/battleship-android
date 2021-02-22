@@ -1,4 +1,4 @@
-package com.example.battleship.main.data
+package com.example.battleship.data
 
 import com.example.battleship.utils.BoardArray
 import com.example.battleship.utils.Constants

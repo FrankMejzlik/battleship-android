@@ -3,9 +3,9 @@ package com.example.battleship.shipBoardsViewModel
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.example.battleship.main.data.Board
-import com.example.battleship.main.data.Cell
-import com.example.battleship.main.data.Ship
+import com.example.battleship.data.Board
+import com.example.battleship.data.Cell
+import com.example.battleship.data.Ship
 import com.example.battleship.utils.BoardArray
 import com.example.battleship.utils.CellPair
 import com.example.battleship.utils.Constants
@@ -41,7 +41,7 @@ class ShipBoards(val app: Application?) {
         val cellState = _board.getCell(selectedRow, selectedCol)?.state
 
         when (action) {
-            Constants.ShipAction.PLACE -> if (cellState == Constants.CellStates.EMPTY) placeShip(
+            Constants.ShipAction.PLACE -> placeShip(
                 shipSize,
                 true
             )

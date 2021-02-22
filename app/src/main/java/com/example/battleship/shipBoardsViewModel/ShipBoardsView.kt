@@ -38,13 +38,33 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
 
     private val selectedCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#6ead3a")
+        color = Color.parseColor("#04a6cb")
     }
 
     private val textPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.BLACK
         textSize = 24F
+    }
+
+    private val ship2CellPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#afafb5")
+    }
+
+    private val ship3CellPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#7f7f87")
+    }
+
+    private val ship4CellPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#55555a")
+    }
+
+    private val ship5CellPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#2a2a2d")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -68,6 +88,19 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 val row = cell.row
                 val col = cell.col
 
+                // Paint cell with ship.
+                if (cell.state == Constants.CellStates.SHIP) {
+                    val paint = when (cell.ship?.size) {
+                        2 -> ship2CellPaint
+                        3 -> ship3CellPaint
+                        4 -> ship4CellPaint
+                        5 -> ship5CellPaint
+                        else -> Paint()
+                    }
+                    fillCell(canvas, row, col, paint)
+                }
+
+                // Paint chosen cell.
                 if (row == selectedRow && col == selectedCol) {
                     fillCell(canvas, row, col, selectedCellPaint)
                 }
@@ -116,8 +149,8 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                     Constants.CellStates.EMPTY -> ""
                     Constants.CellStates.HIT -> "X"
                     Constants.CellStates.MISS -> "O"
-                    Constants.CellStates.SHIP -> "S"
-                    null -> return
+                    // Constants.CellStates.SHIP -> "S"
+                    else -> return
                 }
 
                 val textBounds = Rect()

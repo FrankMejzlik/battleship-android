@@ -3,7 +3,7 @@ package com.example.battleship.shipBoardsViewModel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.battleship.main.data.Board
+import com.example.battleship.data.Board
 import com.example.battleship.utils.BoardArray
 import com.example.battleship.utils.CellPair
 import com.example.battleship.utils.Constants
