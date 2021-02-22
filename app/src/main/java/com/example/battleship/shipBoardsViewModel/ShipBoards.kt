@@ -1,8 +1,11 @@
 package com.example.battleship.shipBoardsViewModel
 
 import android.app.Application
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.example.battleship.R
 import com.example.battleship.data.Board
 import com.example.battleship.data.Cell
 import com.example.battleship.data.Ship
@@ -12,18 +15,20 @@ import com.example.battleship.utils.Constants
 
 class ShipBoards(val app: Application?) {
 
-    // Direction for counting size of the ship
-    private enum class Direction {
-        LEFT, RIGHT
-    }
-
-    private lateinit var _board: Board
+    private var _board: Board
 
     var selectedCellLiveData = MutableLiveData<CellPair>()
     var cellsLiveData = MutableLiveData<BoardArray>()
 
     private var selectedRow = -1
     private var selectedCol = -1
+
+    // Counter of number of placed ships.
+    var counter = Array(4) { 0 }
+
+    // Maximum limit of ships for each type
+    var maxLimit = arrayOf(4, 3, 2, 1)
+    val buttonNames = arrayOf("btn_two_ship", "btn_three_ship", "btn_four_ship", "btn_five_ship")
 
     init {
         val cells = BoardArray(Constants.boardSideSize) { i ->
@@ -35,21 +40,65 @@ class ShipBoards(val app: Application?) {
         cellsLiveData.postValue(_board.cells)
     }
 
-    fun handleInput(shipSize: Int, action: Constants.ShipAction) {
+    fun handleInput(view: View, shipSize: Int, action: Constants.ShipAction) {
         if (selectedRow == -1 || selectedCol == -1) return
 
         val cellState = _board.getCell(selectedRow, selectedCol)?.state
 
         when (action) {
-            Constants.ShipAction.PLACE -> placeShip(
-                shipSize,
-                true
-            )
+            Constants.ShipAction.PLACE -> {
+                if (placeShip(shipSize, true)) {
+                    handleCounter(view, Constants.ShipAction.PLACE, shipSize)
+                    handleShipButtons(view, Constants.ShipAction.PLACE, shipSize)
+                }
+
+            }
             Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP) rotateShip()
-            Constants.ShipAction.ERASE -> if (cellState == Constants.CellStates.SHIP) eraseShip()
+            Constants.ShipAction.ERASE -> {
+                if (cellState == Constants.CellStates.SHIP) {
+                    val size = _board.getCell(selectedRow, selectedCol)?.ship?.size ?: 0
+                    eraseShip()
+                    handleCounter(view, Constants.ShipAction.ERASE, size)
+                    handleShipButtons(view, Constants.ShipAction.ERASE, size)
+                }
+            }
         }
 
         cellsLiveData.postValue(_board.cells)
+    }
+
+    private fun handleCounter(view: View, action: Constants.ShipAction, shipSize: Int) {
+        when (action) {
+            Constants.ShipAction.PLACE -> ++counter[shipSize - 2]
+            Constants.ShipAction.ERASE -> --counter[shipSize - 2]
+            else -> return
+        }
+    }
+
+    private fun handleShipButtons(view: View, action: Constants.ShipAction, shipSize: Int) {
+        var disableButton = false
+
+        val shipIndex = shipSize - 2
+        if (action == Constants.ShipAction.PLACE) {
+            if (counter[shipIndex] >= maxLimit[shipIndex]) {
+                counter[shipIndex] = maxLimit[shipIndex]
+                disableButton = true
+            }
+        }
+
+        val shipButton = when (shipIndex) {
+            0 -> R.id.btn_two_ship
+            1 -> R.id.btn_three_ship
+            2 -> R.id.btn_four_ship
+            3 -> R.id.btn_five_ship
+            else -> return
+        }
+        val isEnabled = view.findViewById<Button>(shipButton).isEnabled
+
+        if (disableButton) {
+            if (isEnabled) view.findViewById<Button>(shipButton).isEnabled = false
+        } else
+            if (!isEnabled) view.findViewById<Button>(shipButton).isEnabled = true
     }
 
     private fun placeShip(shipSize: Int, isHorizontal: Boolean): Boolean {

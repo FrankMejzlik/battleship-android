@@ -51,18 +51,18 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                         btn_two_ship -> 2
                         else -> 0
                     }
-                viewModel.shipBoard.handleInput(shipSize, Constants.ShipAction.PLACE)
+                viewModel.shipBoard.handleInput(it, shipSize, Constants.ShipAction.PLACE)
             }
         }
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
-            viewModel.shipBoard.handleInput(0, Constants.ShipAction.ROTATE)
+            viewModel.shipBoard.handleInput(view, 0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
         btn_erase_ship.setOnClickListener {
-            viewModel.shipBoard.handleInput(0, Constants.ShipAction.ERASE)
+            viewModel.shipBoard.handleInput(view, 0, Constants.ShipAction.ERASE)
         }
     }
 
