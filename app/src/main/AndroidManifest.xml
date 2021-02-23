@@ -8,17 +8,35 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Battleship">
-        <activity android:name=".main.MainActivity">
+        android:theme="@style/Theme.Battleship"
+        >
+
+        <!-- Main display -->
+        <activity
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".setPlayers.SetPlayersActivity" />
-        <activity android:name=".middleScreen.MiddleScreenActivity" />
-        <activity android:name=".placeShips.PlaceShipsActivity" />
+
+        <!-- Set players display -->
+        <activity
+            android:name="com.example.battleship.activities.setPlayers.SetPlayersActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+
+        <!-- Switch player display -->
+        <activity
+            android:name="com.example.battleship.activities.middleScreen.MiddleScreenActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Place ships display -->
+        <activity
+            android:name="com.example.battleship.activities.placeShips.PlaceShipsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

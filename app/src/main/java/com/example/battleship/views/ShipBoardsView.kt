@@ -1,4 +1,4 @@
-package com.example.battleship.shipBoardsViewModel
+package com.example.battleship.views
 
 import android.content.Context
 import android.graphics.Canvas
@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.example.battleship.utils.BoardArray
-import com.example.battleship.utils.Constants
+import com.example.battleship.config.Constants
 
 // Tutorial: https://www.youtube.com/watch?v=00QdlHuKGH8&t=45s
 
@@ -20,7 +20,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     private var selectedRow = -1
     private var selectedCol = -1
 
-    private var listener: ShipBoardsView.OnTouchListener? = null
+    private var listener: OnTouchListener? = null
 
     private var cells: BoardArray? = null
 
@@ -194,7 +194,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
         invalidate()
     }
 
-    fun registerListener(listener: ShipBoardsView.OnTouchListener) {
+    fun registerListener(listener: OnTouchListener) {
         this.listener = listener
     }
 

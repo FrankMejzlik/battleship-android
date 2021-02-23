@@ -1,4 +1,4 @@
-package com.example.battleship.main
+package com.example.battleship.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

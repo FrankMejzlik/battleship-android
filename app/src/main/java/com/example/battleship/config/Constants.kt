@@ -1,4 +1,4 @@
-package com.example.battleship.utils
+package com.example.battleship.config
 
 object Constants {
 
@@ -17,6 +17,11 @@ object Constants {
 
     // Board size
     const val boardSideSize = 10
+
+    // All states of game.
+    enum class GameStates {
+        PL_SHOOT, PL_RESULT, PL_SWITCH, PL_PLACE, INIT, SCOREBOARD, INPUT_NAMES
+    }
 
     // Indices of the players.
     enum class Indices {

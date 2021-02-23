@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".placeShips.PlaceShipsActivity">
+    tools:context=".activities.placeShips.PlaceShipsActivity">
 
-    <com.example.battleship.shipBoardsViewModel.ShipBoardsView
+    <com.example.battleship.views.ShipBoardsView
         android:id="@+id/view_board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

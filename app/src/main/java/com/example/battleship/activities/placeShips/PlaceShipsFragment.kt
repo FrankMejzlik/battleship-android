@@ -1,4 +1,4 @@
-package com.example.battleship.placeShips
+package com.example.battleship.activities.placeShips
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,31 +9,31 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.battleship.R
-import com.example.battleship.shipBoardsViewModel.ShipBoardsView
-import com.example.battleship.shipBoardsViewModel.ShipBoardsViewModel
-import com.example.battleship.shipBoardsViewModel.ShipBoardsViewModelFactory
+import com.example.battleship.views.ShipBoardsView
+import com.example.battleship.viewModels.GameViewModel
+import com.example.battleship.viewModels.GameViewModelFactory
 import com.example.battleship.utils.BoardArray
 import com.example.battleship.utils.CellPair
-import com.example.battleship.utils.Constants
+import com.example.battleship.config.Constants
 import kotlinx.android.synthetic.main.fragment_place_ships.*
 import java.io.Serializable
 
 class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
-    private lateinit var viewModel: ShipBoardsViewModel
-    private lateinit var viewModelFactory: ShipBoardsViewModelFactory
+    private lateinit var viewModel: GameViewModel
+    private lateinit var viewModelFactory: GameViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory = ShipBoardsViewModelFactory(activity?.application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ShipBoardsViewModel::class.java)
-        viewModel.shipBoard.selectedCellLiveData.observe(viewLifecycleOwner, Observer {
+        viewModelFactory = GameViewModelFactory(activity?.application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
+        viewModel.game.currPlayer?.selectedCellLiveData?.observe(viewLifecycleOwner, Observer {
             updateSelectedCellUI(it)
         })
-        viewModel.shipBoard.cellsLiveData.observe(viewLifecycleOwner, Observer { updateCells(it) })
+        viewModel.game.currPlayer?.cellsLiveData?.observe(viewLifecycleOwner, Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
     }
 
@@ -51,18 +51,18 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                         btn_two_ship -> 2
                         else -> 0
                     }
-                viewModel.shipBoard.handleInput(it, shipSize, Constants.ShipAction.PLACE)
+                viewModel.game.currPlayer?.handleInput(it, shipSize, Constants.ShipAction.PLACE)
             }
         }
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
-            viewModel.shipBoard.handleInput(view, 0, Constants.ShipAction.ROTATE)
+            viewModel.game.currPlayer?.handleInput(view, 0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
         btn_erase_ship.setOnClickListener {
-            viewModel.shipBoard.handleInput(view, 0, Constants.ShipAction.ERASE)
+            viewModel.game.currPlayer?.handleInput(view, 0, Constants.ShipAction.ERASE)
         }
     }
 
@@ -75,14 +75,14 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         if (cell != Pair(-1, -1)) {
             Toast.makeText(
                 activity,
-                "chosen cell is: " + viewModel.shipBoard.selectedCellLiveData.value?.first + ", " + viewModel.shipBoard.selectedCellLiveData.value?.second,
+                "chosen cell is: " + viewModel.game.currPlayer?.selectedCellLiveData?.value?.first + ", " + viewModel.game.currPlayer?.selectedCellLiveData?.value?.second,
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
 
     override fun onCellTouched(row: Int, col: Int) {
-        viewModel.shipBoard.updateSelectedCell(row, col)
+        viewModel.game.currPlayer?.updateSelectedCell(row, col)
     }
 
     override fun onStart() {

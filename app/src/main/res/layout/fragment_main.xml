@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.MainFragment">
+    android:background="@drawable/icon_velka"
+    tools:context=".activities.MainFragment">
 
     <TextView
         android:id="@+id/txt_main_battleship"

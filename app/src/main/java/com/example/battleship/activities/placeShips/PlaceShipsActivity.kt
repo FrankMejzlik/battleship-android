@@ -1,9 +1,9 @@
-package com.example.battleship.placeShips
+package com.example.battleship.activities.placeShips
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.battleship.R
-import com.example.battleship.utils.Constants
+import com.example.battleship.config.Constants
 
 class PlaceShipsActivity : AppCompatActivity() {
 

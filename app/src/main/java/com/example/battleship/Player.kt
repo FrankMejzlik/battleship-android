@@ -1,20 +1,21 @@
-package com.example.battleship.shipBoardsViewModel
+package com.example.battleship
 
 import android.app.Application
+import android.content.Context
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.battleship.R
-import com.example.battleship.data.Board
-import com.example.battleship.data.Cell
-import com.example.battleship.data.Ship
 import com.example.battleship.utils.BoardArray
 import com.example.battleship.utils.CellPair
-import com.example.battleship.utils.Constants
+import com.example.battleship.config.Constants
+import java.io.File
 
-class ShipBoards(val app: Application?) {
+class Player(val app: Application?) {
 
+    private var _player1Name = MutableLiveData<String>()
+    private var _player2Name = MutableLiveData<String>()
     private var _board: Board
 
     var selectedCellLiveData = MutableLiveData<CellPair>()
@@ -38,6 +39,50 @@ class ShipBoards(val app: Application?) {
 
         selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
         cellsLiveData.postValue(_board.cells)
+
+        val names = try {
+            val file =
+                File(app?.applicationContext?.filesDir.toString() + "/" + Constants.fileNames)
+            file.createNewFile()
+
+            app?.applicationContext?.openFileInput(Constants.fileNames)?.bufferedReader()
+                ?.useLines { lines ->
+                    lines.fold("") { some, text ->
+                        "$some\n$text"
+                    }
+                }.toString()
+        } catch (e: Exception) {
+            e.printStackTrace().toString()
+        }
+        val splittedNames = names.split('\n').filter {
+            it.isNotEmpty()
+        }
+
+        if (splittedNames.size >= 2) {
+            _player1Name.postValue(splittedNames[0])
+            _player2Name.postValue(splittedNames[1])
+        }
+    }
+
+    fun getName(index: Constants.Indices): LiveData<String> {
+        return when (index) {
+            Constants.Indices.FIRST -> _player1Name
+            Constants.Indices.SECOND -> _player2Name
+        }
+    }
+
+    fun saveNames(name1: String, name2: String) {
+        try {
+            app?.applicationContext?.openFileOutput(Constants.fileNames, Context.MODE_PRIVATE).use {
+                it?.write(name1.toByteArray())
+                it?.write("\n".toByteArray())
+                it?.write(name2.toByteArray())
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        _player1Name.postValue(name1)
+        _player2Name.postValue(name2)
     }
 
     fun handleInput(view: View, shipSize: Int, action: Constants.ShipAction) {

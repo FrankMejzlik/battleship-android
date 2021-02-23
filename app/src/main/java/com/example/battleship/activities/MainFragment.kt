@@ -1,4 +1,4 @@
-package com.example.battleship.main
+package com.example.battleship.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.battleship.R
-import com.example.battleship.setPlayers.SetPlayersActivity
+import com.example.battleship.activities.setPlayers.SetPlayersActivity
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {

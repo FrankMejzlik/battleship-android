@@ -1,4 +1,4 @@
-package com.example.battleship.setPlayers
+package com.example.battleship.activities.setPlayers
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,19 +8,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.battleship.playersNamesViewModel.PlayersNamesViewModel
-import com.example.battleship.playersNamesViewModel.PlayersNamesViewModelFactory
 import com.example.battleship.R
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_set_players.*
-import com.example.battleship.utils.Constants
-import com.example.battleship.middleScreen.MiddleScreenActivity
+import com.example.battleship.config.Constants
+import com.example.battleship.activities.middleScreen.MiddleScreenActivity
+import com.example.battleship.viewModels.GameViewModel
+import com.example.battleship.viewModels.GameViewModelFactory
 
 
 class SetPlayersFragment : Fragment() {
 
-    private lateinit var viewModel: PlayersNamesViewModel
-    private lateinit var viewModelFactory: PlayersNamesViewModelFactory
+    private lateinit var viewModel: GameViewModel
+    private lateinit var viewModelFactory: GameViewModelFactory
 
 
     // Store players names
@@ -37,8 +37,8 @@ class SetPlayersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory = PlayersNamesViewModelFactory(activity?.application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(PlayersNamesViewModel::class.java)
+        viewModelFactory = GameViewModelFactory(activity?.application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
         return inflater.inflate(R.layout.fragment_set_players, container, true)
     }
 
@@ -63,12 +63,12 @@ class SetPlayersFragment : Fragment() {
 
     private fun readNames(): String {
         //viewModel.loadNames()
-        return viewModel.getName(Constants.Indices.FIRST).value +
-                viewModel.getName(Constants.Indices.SECOND).value
+        return viewModel.game.player1.getName(Constants.Indices.FIRST).value +
+                viewModel.game.player2.getName(Constants.Indices.SECOND).value
     }
 
     private fun saveNames() {
-        viewModel.saveNames(
+        viewModel.game.currPlayer?.saveNames(
             txtPlayer1.editText?.text.toString(),
             txtPlayer2.editText?.text.toString()
         )

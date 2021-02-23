@@ -1,4 +1,4 @@
-package com.example.battleship.middleScreen
+package com.example.battleship.activities.middleScreen
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,41 +7,41 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.battleship.playersNamesViewModel.PlayersNamesViewModel
-import com.example.battleship.playersNamesViewModel.PlayersNamesViewModelFactory
-import com.example.battleship.utils.Constants
+import com.example.battleship.config.Constants
 import com.example.battleship.R
-import com.example.battleship.placeShips.PlaceShipsActivity
+import com.example.battleship.activities.placeShips.PlaceShipsActivity
+import com.example.battleship.viewModels.GameViewModel
+import com.example.battleship.viewModels.GameViewModelFactory
 import kotlinx.android.synthetic.main.fragment_middle_screen.*
 import java.io.Serializable
 
 class MiddleScreenFragment : Fragment() {
 
-    private lateinit var viewModel: PlayersNamesViewModel
-    private lateinit var viewModelFactory: PlayersNamesViewModelFactory
+    private lateinit var viewModel: GameViewModel
+    private lateinit var viewModelFactory: GameViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory = PlayersNamesViewModelFactory(activity?.application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(PlayersNamesViewModel::class.java)
+        viewModelFactory = GameViewModelFactory(activity?.application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
         return inflater.inflate(R.layout.fragment_middle_screen, container, false)
     }
 
     override fun onStart() {
         super.onStart()
 
-        viewModel.loadNames()
+//        viewModel.game.currPlayer?.loadNames()
 
         val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
-        val playerName = viewModel.getName(playerID)
+        val playerName = viewModel.game.currPlayer?.getName(playerID)
         val buttonAction =
             arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions
         val playerText = when (playerID) {
-            Constants.Indices.FIRST -> "First player: " + playerName.value
-            Constants.Indices.SECOND -> "Second player: " + playerName.value
+            Constants.Indices.FIRST -> "First player: " + playerName?.value
+            Constants.Indices.SECOND -> "Second player: " + playerName?.value
         }
         val buttonText = when (buttonAction) {
             Constants.ButtonActions.PLACE -> "Place ships"
