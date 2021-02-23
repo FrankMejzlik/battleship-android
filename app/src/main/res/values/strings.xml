@@ -9,4 +9,5 @@
     <string name="ship_size_3">Submarine (3)</string>
     <string name="ship_size_4">Battleship (4)</string>
     <string name="ship_size_5">Carrier (5)</string>
+    <string name="btn_main_play">Play</string>
 </resources>
