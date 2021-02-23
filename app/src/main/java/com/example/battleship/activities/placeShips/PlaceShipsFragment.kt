@@ -33,7 +33,9 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         viewModel.game.currPlayer?.selectedCellLiveData?.observe(viewLifecycleOwner, Observer {
             updateSelectedCellUI(it)
         })
-        viewModel.game.currPlayer?.cellsLiveData?.observe(viewLifecycleOwner, Observer { updateCells(it) })
+        viewModel.game.currPlayer?.cellsLiveData?.observe(
+            viewLifecycleOwner,
+            Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
     }
 
