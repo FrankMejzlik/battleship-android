@@ -24,9 +24,9 @@
 
         <!-- Set players display -->
         <activity
-            android:name="com.example.battleship.activities.setPlayers.SetPlayersActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:name="com.example.battleship.activities.setPlayers.SetPlayersActivity" />
+<!--            android:windowSoftInputMode="stateVisible|adjustResize" />-->
+        <!--android:screenOrientation="portrait"-->
 
         <!-- Switch player display -->
         <activity

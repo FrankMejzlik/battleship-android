@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.battleship.R
 import com.google.android.material.textfield.TextInputLayout
@@ -22,36 +23,35 @@ class SetPlayersFragment : Fragment() {
     private lateinit var viewModel: GameViewModel
     private lateinit var viewModelFactory: GameViewModelFactory
 
-
-    // Store players names
-    private val txtPlayer1: TextInputLayout by lazy {
-        txt_player1
-    }
-
-    private val txtPlayer2: TextInputLayout by lazy {
-        txt_player2
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory = GameViewModelFactory(activity?.application)
+
+        val playerID = Constants.Indices.FIRST
+        val state = Constants.GameStates.INPUT_NAMES
+
+        viewModelFactory = GameViewModelFactory(activity?.application, state, playerID)
         viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
+        viewModel.game.player1.getName().observe(viewLifecycleOwner, Observer {
+            updatePlayerName(Constants.Indices.FIRST, it)
+        })
+        viewModel.game.player2.getName().observe(viewLifecycleOwner, Observer {
+            updatePlayerName(Constants.Indices.SECOND, it)
+        })
         return inflater.inflate(R.layout.fragment_set_players, container, true)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Save names of players into current started instance from onSaveInstanceState
-        if (savedInstanceState != null) {
-            txtPlayer1.editText?.setText(savedInstanceState.getString(KEY_PLAYER1))
-            txtPlayer2.editText?.setText(savedInstanceState.getString(KEY_PLAYER2))
+    private fun updatePlayerName(index: Constants.Indices, name: String) {
+        when (index) {
+            Constants.Indices.FIRST -> txt_player1.editText?.setText(name)
+            Constants.Indices.SECOND -> txt_player2.editText?.setText(name)
         }
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_start.setOnClickListener {
-            saveNames()
-            Toast.makeText(activity, "Names were saved:" + readNames(), Toast.LENGTH_LONG).show()
             val name = Constants.Indices.FIRST //txtPlayer1.editText?.text.toString()
             val button = Constants.ButtonActions.PLACE //"Place"
             val intent = Intent(activity, MiddleScreenActivity::class.java)
@@ -61,27 +61,16 @@ class SetPlayersFragment : Fragment() {
         }
     }
 
-    private fun readNames(): String {
-        //viewModel.loadNames()
-        return viewModel.game.player1.getName(Constants.Indices.FIRST).value +
-                viewModel.game.player2.getName(Constants.Indices.SECOND).value
+    override fun onPause() {
+        super.onPause()
+        viewModel.game.player1.setName(txt_player1.editText?.text.toString())
+        viewModel.game.player2.setName(txt_player2.editText?.text.toString())
     }
 
-    private fun saveNames() {
-        viewModel.game.currPlayer?.saveNames(
-            txtPlayer1.editText?.text.toString(),
-            txtPlayer2.editText?.text.toString()
-        )
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(KEY_PLAYER1, txtPlayer1.editText?.text.toString())
-        outState.putString(KEY_PLAYER2, txtPlayer2.editText?.text.toString())
-    }
-
-    companion object {
-        const val KEY_PLAYER1 = "player1"
-        const val KEY_PLAYER2 = "player2"
+    override fun onStop() {
+        super.onStop()
+        viewModel.game.player1.setName(txt_player1.editText?.text.toString())
+        viewModel.game.player2.setName(txt_player2.editText?.text.toString())
+        viewModel.game.saveNames()
     }
 }

@@ -28,12 +28,17 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory = GameViewModelFactory(activity?.application)
+        val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
+        val state = Constants.GameStates.PL_PLACE
+
+        viewModelFactory = GameViewModelFactory(activity?.application, state, playerID)
         viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
-        viewModel.game.currPlayer?.selectedCellLiveData?.observe(viewLifecycleOwner, Observer {
-            updateSelectedCellUI(it)
-        })
-        viewModel.game.currPlayer?.cellsLiveData?.observe(
+        viewModel.game.currPlayer?.getBoard()?.selectedCellLiveData?.observe(
+            viewLifecycleOwner,
+            Observer {
+                updateSelectedCellUI(it)
+            })
+        viewModel.game.currPlayer?.getBoard()?.cellsLiveData?.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
@@ -53,18 +58,19 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                         btn_two_ship -> 2
                         else -> 0
                     }
-                viewModel.game.currPlayer?.handleInput(it, shipSize, Constants.ShipAction.PLACE)
+                viewModel.game.currPlayer?.getBoard()
+                    ?.handleInput(it, shipSize, Constants.ShipAction.PLACE)
             }
         }
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
-            viewModel.game.currPlayer?.handleInput(view, 0, Constants.ShipAction.ROTATE)
+            viewModel.game.currPlayer?.getBoard()?.handleInput(view, 0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
         btn_erase_ship.setOnClickListener {
-            viewModel.game.currPlayer?.handleInput(view, 0, Constants.ShipAction.ERASE)
+            viewModel.game.currPlayer?.getBoard()?.handleInput(view, 0, Constants.ShipAction.ERASE)
         }
     }
 
@@ -77,14 +83,14 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         if (cell != Pair(-1, -1)) {
             Toast.makeText(
                 activity,
-                "chosen cell is: " + viewModel.game.currPlayer?.selectedCellLiveData?.value?.first + ", " + viewModel.game.currPlayer?.selectedCellLiveData?.value?.second,
+                "chosen cell is: " + viewModel.game.currPlayer?.getBoard()?.selectedCellLiveData?.value?.first + ", " + viewModel.game.currPlayer?.getBoard()?.selectedCellLiveData?.value?.second,
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
 
     override fun onCellTouched(row: Int, col: Int) {
-        viewModel.game.currPlayer?.updateSelectedCell(row, col)
+        viewModel.game.currPlayer?.getBoard()?.updateSelectedCell(row, col)
     }
 
     override fun onStart() {

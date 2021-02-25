@@ -10,4 +10,5 @@
     <string name="ship_size_4">Battleship (4)</string>
     <string name="ship_size_5">Carrier (5)</string>
     <string name="btn_main_play">Play</string>
+    <string name="btn_set_players_start">Start</string>
 </resources>

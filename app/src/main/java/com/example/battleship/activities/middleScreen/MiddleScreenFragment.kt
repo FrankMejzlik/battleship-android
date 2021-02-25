@@ -25,7 +25,9 @@ class MiddleScreenFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory = GameViewModelFactory(activity?.application)
+        val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
+        val state = Constants.GameStates.PL_SWITCH
+        viewModelFactory = GameViewModelFactory(activity?.application, state, playerID)
         viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
         return inflater.inflate(R.layout.fragment_middle_screen, container, false)
     }
@@ -35,13 +37,14 @@ class MiddleScreenFragment : Fragment() {
 
 //        viewModel.game.currPlayer?.loadNames()
 
-        val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
-        val playerName = viewModel.game.currPlayer?.getName(playerID)
+        //val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
+        //viewModel.game.setCurrPlayer(playerID)
+        val playerName = viewModel.game.currPlayer?.getName()?.value ?: ""
         val buttonAction =
             arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions
-        val playerText = when (playerID) {
-            Constants.Indices.FIRST -> "First player: " + playerName?.value
-            Constants.Indices.SECOND -> "Second player: " + playerName?.value
+        val playerText = when (viewModel.game.currPlayerID) {
+            Constants.Indices.FIRST -> "First player: $playerName"
+            Constants.Indices.SECOND -> "Second player: $playerName"
         }
         val buttonText = when (buttonAction) {
             Constants.ButtonActions.PLACE -> "Place ships"
@@ -52,7 +55,7 @@ class MiddleScreenFragment : Fragment() {
 
         btn_action.setOnClickListener {
             val intent = Intent(activity, PlaceShipsActivity::class.java)
-            intent.putExtra(Constants.KEY_PLAYER_ID, playerID)
+            intent.putExtra(Constants.KEY_PLAYER_ID, viewModel.game.currPlayerID)
             startActivity(intent)
         }
 
