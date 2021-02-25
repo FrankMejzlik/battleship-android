@@ -15,6 +15,7 @@ import com.example.battleship.viewModels.GameViewModelFactory
 import com.example.battleship.utils.BoardArray
 import com.example.battleship.utils.CellPair
 import com.example.battleship.config.Constants
+import kotlinx.android.synthetic.main.fragment_middle_screen.*
 import kotlinx.android.synthetic.main.fragment_place_ships.*
 import java.io.Serializable
 
@@ -33,6 +34,10 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
         viewModelFactory = GameViewModelFactory(activity?.application, state, playerID)
         viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
+
+        viewModel.game.currPlayer?.getName()?.observe(viewLifecycleOwner, Observer {
+            updatePlayerName(it)
+        })
         viewModel.game.currPlayer?.getBoard()?.selectedCellLiveData?.observe(
             viewLifecycleOwner,
             Observer {
@@ -42,6 +47,12 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
             viewLifecycleOwner,
             Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
+    }
+
+    private fun updatePlayerName(
+        name: String
+    ) {
+        txt_place_ships_player_name.text = name
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
