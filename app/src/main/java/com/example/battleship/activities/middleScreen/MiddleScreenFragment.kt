@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.battleship.config.Constants
 import com.example.battleship.R
@@ -13,6 +14,8 @@ import com.example.battleship.activities.placeShips.PlaceShipsActivity
 import com.example.battleship.viewModels.GameViewModel
 import com.example.battleship.viewModels.GameViewModelFactory
 import kotlinx.android.synthetic.main.fragment_middle_screen.*
+import kotlinx.android.synthetic.main.fragment_place_ships.*
+import kotlinx.android.synthetic.main.fragment_set_players.*
 import java.io.Serializable
 
 class MiddleScreenFragment : Fragment() {
@@ -29,28 +32,26 @@ class MiddleScreenFragment : Fragment() {
         val state = Constants.GameStates.PL_SWITCH
         viewModelFactory = GameViewModelFactory(activity?.application, state, playerID)
         viewModel = ViewModelProvider(this, viewModelFactory).get(GameViewModel::class.java)
+        viewModel.game.currPlayer?.getName()?.observe(viewLifecycleOwner, Observer {
+            updatePlayerName(it)
+        })
         return inflater.inflate(R.layout.fragment_middle_screen, container, false)
+    }
+
+    private fun updatePlayerName(
+        name: String
+    ) {
+        txt_player_name.text = name
     }
 
     override fun onStart() {
         super.onStart()
 
-//        viewModel.game.currPlayer?.loadNames()
-
-        //val playerID = arguments?.getSerializable(Constants.KEY_PLAYER_ID) as Constants.Indices
-        //viewModel.game.setCurrPlayer(playerID)
-        val playerName = viewModel.game.currPlayer?.getName()?.value ?: ""
-        val buttonAction =
-            arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions
-        val playerText = when (viewModel.game.currPlayerID) {
-            Constants.Indices.FIRST -> "First player: $playerName"
-            Constants.Indices.SECOND -> "Second player: $playerName"
-        }
-        val buttonText = when (buttonAction) {
-            Constants.ButtonActions.PLACE -> "Place ships"
-            Constants.ButtonActions.PLAY -> "Play"
-        }
-        txt_player_name.text = playerText
+        val buttonText =
+            when (arguments?.getSerializable(Constants.KEY_BUTTON_ACT) as Constants.ButtonActions) {
+                Constants.ButtonActions.PLACE -> "Place ships"
+                Constants.ButtonActions.PLAY -> "Play"
+            }
         btn_action.text = buttonText
 
         btn_action.setOnClickListener {
