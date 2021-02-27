@@ -1,30 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.ShootFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".fragments.PlaceShipsFragment">
+
+    <com.example.battleship.views.ShipBoardsView
+        android:id="@+id/view_my_board"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/view_shoot_board"
+        />
+
+    <com.example.battleship.views.ShipBoardsView
+        android:id="@+id/view_shoot_board"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/txt_player_name_shoot"
+        />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txt_player_name_shoot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ja som SHOOT"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.767" />
+        android:layout_above="@+id/gl_shoot"
 
-    <Button
-        android:id="@+id/btn_shoot"
+        />
+
+    <GridLayout
+        android:id="@+id/gl_shoot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SHOOT"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"         />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:columnCount="3"
+        android:rowCount="4"
+        android:layout_alignParentBottom="true"
+        >
+
+        <Button
+            android:id="@+id/btn_shoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:text="SHOOT" />
+    </GridLayout>
+
+</RelativeLayout>

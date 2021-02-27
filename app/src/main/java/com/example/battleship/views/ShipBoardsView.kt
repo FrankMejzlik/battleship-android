@@ -74,7 +74,9 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     override fun onDraw(canvas: Canvas) {
-        cellSizePixels = (width / Constants.boardSideSize).toFloat()
+        cellSizePixels = Math.min(
+            (width / Constants.boardSideSize).toFloat(),
+            (height / Constants.boardSideSize).toFloat())
         fillCells(canvas)
         drawLines(canvas)
         drawText(canvas)
