@@ -24,7 +24,9 @@ class MiddleScreenFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(GameViewModel::class.java)
+        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+            GameViewModel::class.java
+        )
 
         viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)

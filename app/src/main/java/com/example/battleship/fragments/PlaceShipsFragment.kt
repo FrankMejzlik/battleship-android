@@ -28,7 +28,9 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(GameViewModel::class.java)
+        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+            GameViewModel::class.java
+        )
 
         viewModel.game.getCurrPlayer()?.getName()?.observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
@@ -71,12 +73,14 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer()?.getBoard()?.handleInput(view, 0, Constants.ShipAction.ROTATE)
+            viewModel.game.getCurrPlayer()?.getBoard()
+                ?.handleInput(view, 0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
         btn_erase_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer()?.getBoard()?.handleInput(view, 0, Constants.ShipAction.ERASE)
+            viewModel.game.getCurrPlayer()?.getBoard()
+                ?.handleInput(view, 0, Constants.ShipAction.ERASE)
         }
 
         btn_place_ships_ok.setOnClickListener {
@@ -94,7 +98,9 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         if (cell != Pair(-1, -1)) {
             Toast.makeText(
                 activity,
-                "chosen cell is: " + viewModel.game.getCurrPlayer()?.getBoard()?.selectedCellLiveData?.value?.first + ", " + viewModel.game.getCurrPlayer()?.getBoard()?.selectedCellLiveData?.value?.second,
+                "chosen cell is: " + viewModel.game.getCurrPlayer()
+                    ?.getBoard()?.selectedCellLiveData?.value?.first + ", " + viewModel.game.getCurrPlayer()
+                    ?.getBoard()?.selectedCellLiveData?.value?.second,
                 Toast.LENGTH_SHORT
             ).show()
         }

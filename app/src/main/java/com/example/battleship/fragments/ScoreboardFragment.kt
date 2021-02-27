@@ -24,8 +24,10 @@ class ScoreboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_restart.setOnClickListener {
-            val viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
-                GameViewModel::class.java)
+            val viewModel =
+                (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+                    GameViewModel::class.java
+                )
             val nextFrag = viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }

@@ -24,7 +24,9 @@ class SetPlayersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(GameViewModel::class.java)
+        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+            GameViewModel::class.java
+        )
 
         viewModel.game.player1.getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(Constants.Indices.FIRST, it)

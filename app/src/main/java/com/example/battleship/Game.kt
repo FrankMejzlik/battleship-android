@@ -26,8 +26,8 @@ class Game() {
         return 1
     }
 
-    fun getCurrPlayer() : Player {
-        return when(state) {
+    fun getCurrPlayer(): Player {
+        return when (state) {
             Constants.GameStates.INIT -> player1
             Constants.GameStates.INPUT_NAMES -> player1
             Constants.GameStates.P1_PLACE_SWITCH -> player1
@@ -48,7 +48,7 @@ class Game() {
     fun step(): Int {
         val oldState = state
         update()
-        return when(oldState) {
+        return when (oldState) {
             Constants.GameStates.INIT -> R.id.action_mainFragment_to_setPlayersFragment
             Constants.GameStates.INPUT_NAMES -> R.id.action_setPlayersFragment_to_middleScreenFragment
             Constants.GameStates.P1_PLACE_SWITCH -> R.id.action_middleScreenFragment_to_placeShipsFragment
@@ -71,7 +71,7 @@ class Game() {
     }
 
     fun update() {
-        state = when(state) {
+        state = when (state) {
             Constants.GameStates.INIT -> Constants.GameStates.INPUT_NAMES
             Constants.GameStates.INPUT_NAMES -> Constants.GameStates.P1_PLACE_SWITCH
             Constants.GameStates.P1_PLACE_SWITCH -> Constants.GameStates.P1_PLACE
@@ -80,11 +80,11 @@ class Game() {
             Constants.GameStates.P2_PLACE -> Constants.GameStates.P1_SWITCH
             Constants.GameStates.P1_SWITCH -> Constants.GameStates.P1_SHOOT
             Constants.GameStates.P1_SHOOT -> if (detectWin() == -1) Constants.GameStates.P1_WIN
-                                            else Constants.GameStates.P1_RES
+            else Constants.GameStates.P1_RES
             Constants.GameStates.P1_RES -> Constants.GameStates.P2_SWITCH
             Constants.GameStates.P2_SWITCH -> Constants.GameStates.P2_SHOOT
             Constants.GameStates.P2_SHOOT -> if (detectWin() == 1) Constants.GameStates.P2_WIN
-                                            else Constants.GameStates.P2_RES
+            else Constants.GameStates.P2_RES
             Constants.GameStates.P2_RES -> Constants.GameStates.P1_SWITCH
             Constants.GameStates.P1_WIN -> Constants.GameStates.INIT
             Constants.GameStates.P2_WIN -> Constants.GameStates.INIT
