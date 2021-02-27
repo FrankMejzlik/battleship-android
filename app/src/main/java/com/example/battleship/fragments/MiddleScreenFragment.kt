@@ -53,18 +53,4 @@ class MiddleScreenFragment : Fragment() {
         }
 
     }
-
-    companion object {
-
-        // Factory method to create fragment instance. Framework requires empty default constructor.
-        @JvmStatic
-        fun newInstance(id: Serializable?, button: Serializable?): MiddleScreenFragment {
-            val fragment = MiddleScreenFragment()
-            fragment.arguments = Bundle().apply {
-                putSerializable(Constants.KEY_PLAYER_ID, id)
-                putSerializable(Constants.KEY_BUTTON_ACT, button)
-            }
-            return fragment
-        }
-    }
 }

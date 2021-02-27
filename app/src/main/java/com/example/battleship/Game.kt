@@ -1,9 +1,6 @@
 package com.example.battleship
 
-import android.app.Application
-import android.content.Context
 import com.example.battleship.config.Constants
-import java.io.File
 
 class Game() {
     private var state = Constants.GameStates.INIT
@@ -26,12 +23,12 @@ class Game() {
     // -1 - player 2 wins
     private fun detectWin(): Int {
         // TODO
-        val boardSize = player2.getBoard().cellsLiveData.value?.size ?: 0
+        val boardSize = player2.getMyBoard().cellsLiveData.value?.size ?: 0
 
         if (getCurrPlayer() == player1) {
             for (i in 0 until boardSize - 1) {
                 for (j in 0 until boardSize - 1) {
-                    if (player2.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                    if (player2.getMyBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }
             }
@@ -39,7 +36,7 @@ class Game() {
         } else {
             for (i in 0 until boardSize - 1) {
                 for (j in 0 until boardSize - 1) {
-                    if (player1.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                    if (player1.getMyBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }
             }

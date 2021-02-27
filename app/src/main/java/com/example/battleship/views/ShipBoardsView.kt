@@ -84,8 +84,6 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     private fun fillCells(canvas: Canvas) {
-        if (selectedRow == -1 || selectedCol == -1) return
-
         cells?.forEach { column ->
             column.forEach { cell ->
                 val row = cell.row
@@ -105,6 +103,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
 
                 // Paint chosen cell.
                 if (row == selectedRow && col == selectedCol) {
+                    if (selectedRow == -1 || selectedCol == -1) {} else
                     fillCell(canvas, row, col, selectedCellPaint)
                 }
             }

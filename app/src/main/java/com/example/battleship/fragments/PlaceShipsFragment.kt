@@ -35,12 +35,12 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         viewModel.game.getCurrPlayer()?.getName()?.observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
-        viewModel.game.getCurrPlayer()?.getBoard()?.selectedCellLiveData?.observe(
+        viewModel.game.getCurrPlayer()?.getMyBoard()?.selectedCellLiveData?.observe(
             viewLifecycleOwner,
             Observer {
                 updateSelectedCellUI(it)
             })
-        viewModel.game.getCurrPlayer()?.getBoard()?.cellsLiveData?.observe(
+        viewModel.game.getCurrPlayer()?.getMyBoard()?.cellsLiveData?.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
@@ -66,20 +66,20 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                         btn_two_ship -> 2
                         else -> 0
                     }
-                viewModel.game.getCurrPlayer()?.getBoard()
+                viewModel.game.getCurrPlayer()?.getMyBoard()
                     ?.handleInput(it, shipSize, Constants.ShipAction.PLACE)
             }
         }
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer()?.getBoard()
+            viewModel.game.getCurrPlayer()?.getMyBoard()
                 ?.handleInput(view, 0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
         btn_erase_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer()?.getBoard()
+            viewModel.game.getCurrPlayer()?.getMyBoard()
                 ?.handleInput(view, 0, Constants.ShipAction.ERASE)
         }
 
@@ -99,33 +99,20 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
             Toast.makeText(
                 activity,
                 "chosen cell is: " + viewModel.game.getCurrPlayer()
-                    ?.getBoard()?.selectedCellLiveData?.value?.first + ", " + viewModel.game.getCurrPlayer()
-                    ?.getBoard()?.selectedCellLiveData?.value?.second,
+                    ?.getMyBoard()?.selectedCellLiveData?.value?.first + ", " + viewModel.game.getCurrPlayer()
+                    ?.getMyBoard()?.selectedCellLiveData?.value?.second,
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
 
     override fun onCellTouched(row: Int, col: Int) {
-        viewModel.game.getCurrPlayer()?.getBoard()?.updateSelectedCell(row, col)
+        viewModel.game.getCurrPlayer()?.getMyBoard()?.updateSelectedCell(row, col)
     }
 
     override fun onStart() {
         super.onStart()
 
         view_board.registerListener(this)
-    }
-
-    companion object {
-
-        // Factory method to create fragment instance. Framework requires empty default constructor.
-        @JvmStatic
-        fun newInstance(id: Serializable?): PlaceShipsFragment {
-            val fragment = PlaceShipsFragment()
-            fragment.arguments = Bundle().apply {
-                putSerializable(Constants.KEY_PLAYER_ID, id)
-            }
-            return fragment
-        }
     }
 }
