@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.battleship.fragments.InitFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_setPlayersFragment"
+            app:destination="@id/setPlayersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setPlayersFragment"
+        android:name="com.example.battleship.fragments.SetPlayersFragment"
+        android:label="fragment_set_players"
+        tools:layout="@layout/fragment_set_players" >
+        <action
+            android:id="@+id/action_setPlayersFragment_to_middleScreenFragment"
+            app:destination="@id/middleScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/middleScreenFragment"
+        android:name="com.example.battleship.fragments.MiddleScreenFragment"
+        android:label="fragment_middle_screen"
+        tools:layout="@layout/fragment_middle_screen" >
+        <action
+            android:id="@+id/action_middleScreenFragment_to_placeShipsFragment"
+            app:destination="@id/placeShipsFragment" />
+        <action
+            android:id="@+id/action_middleScreenFragment_to_shootFragment"
+            app:destination="@id/shootFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/placeShipsFragment"
+        android:name="com.example.battleship.fragments.PlaceShipsFragment"
+        android:label="fragment_place_ships"
+        tools:layout="@layout/fragment_place_ships" >
+        <action
+            android:id="@+id/action_placeShipsFragment_to_middleScreenFragment"
+            app:destination="@id/middleScreenFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shootFragment"
+        android:name="com.example.battleship.fragments.ShootFragment"
+        android:label="fragment_shoot"
+        tools:layout="@layout/fragment_shoot" >
+        <action
+            android:id="@+id/action_shootFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+        <action
+        android:id="@+id/action_shootFragment_to_scoreboardFragment"
+        app:destination="@id/scoreboardFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.example.battleship.fragments.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" >
+        <action
+            android:id="@+id/action_resultFragment_to_middleScreenFragment"
+            app:destination="@id/middleScreenFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scoreboardFragment"
+        android:name="com.example.battleship.fragments.ScoreboardFragment"
+        android:label="fragment_scoreboard"
+        tools:layout="@layout/fragment_scoreboard" >
+        <action
+            android:id="@+id/action_scoreboardFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+
+</navigation>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.placeShips.PlaceShipsActivity">
+    tools:context=".fragments.PlaceShipsFragment">
 
     <com.example.battleship.views.ShipBoardsView
         android:id="@+id/view_board"

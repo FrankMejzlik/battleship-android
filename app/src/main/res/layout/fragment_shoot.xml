@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/icon_velka"
-    tools:context=".fragments.InitFragment">
+    tools:context=".fragments.ShootFragment">
 
-    <Button
-        android:id="@+id/btn_main_play"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_main_play"
+        android:text="Ja som SHOOT"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -19,4 +18,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.767" />
 
+    <Button
+        android:id="@+id/btn_shoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SHOOT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"         />
 </androidx.constraintlayout.widget.ConstraintLayout>

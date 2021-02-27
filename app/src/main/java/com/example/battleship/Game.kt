@@ -5,71 +5,89 @@ import android.content.Context
 import com.example.battleship.config.Constants
 import java.io.File
 
-class Game(
-    val app: Application?,
-    val state: Constants.GameStates,
-    val currPlayerID: Constants.Indices
-) {
-    var currPlayer: Player? = null
+class Game() {
+    private var state = Constants.GameStates.INIT
 
-    var player1 = Player(app)
-    var player2 = Player(app)
+    var player1 = Player()
+    var player2 = Player()
+
+    private var currPlayer = player1
 
     init {
         // If names are not filled yet in the file, use empty strings.
-        if (state != Constants.GameStates.INPUT_NAMES) {
-            // Load names from file.
-            val names = try {
-                val file =
-                    File(app?.applicationContext?.filesDir.toString() + "/" + Constants.fileNames)
-                file.createNewFile()
-
-                app?.applicationContext?.openFileInput(Constants.fileNames)?.bufferedReader()
-                    ?.useLines { lines ->
-                        lines.fold("") { some, text ->
-                            "$some\n$text"
-                        }
-                    }.toString()
-            } catch (e: Exception) {
-                e.printStackTrace().toString()
-            }
-            val splittedNames = names.split('\n').filter {
-                it.isNotEmpty()
-            }
-
-            if (splittedNames.size >= 2) {
-                player1.setName(splittedNames[0])
-                player2.setName(splittedNames[1])
-            } else {
-                player1.setName("")
-                player2.setName("")
-            }
-
-            // Set current player.
-            setCurrPlayer(currPlayerID)
-        } else {
+        if (state == Constants.GameStates.INPUT_NAMES) {
             player1.setName("")
             player2.setName("")
         }
     }
 
-    private fun setCurrPlayer(index: Constants.Indices) {
-        currPlayer = when (index) {
-            Constants.Indices.FIRST -> player1
-            Constants.Indices.SECOND -> player2
+    private fun detectWin(): Int {
+        // TODO
+        return 1
+    }
+
+    fun getCurrPlayer() : Player {
+        return when(state) {
+            Constants.GameStates.INIT -> player1
+            Constants.GameStates.INPUT_NAMES -> player1
+            Constants.GameStates.P1_PLACE_SWITCH -> player1
+            Constants.GameStates.P1_PLACE -> player1
+            Constants.GameStates.P2_PLACE_SWITCH -> player2
+            Constants.GameStates.P2_PLACE -> player2
+            Constants.GameStates.P1_SWITCH -> player1
+            Constants.GameStates.P1_SHOOT -> player1
+            Constants.GameStates.P1_RES -> player1
+            Constants.GameStates.P2_SWITCH -> player2
+            Constants.GameStates.P2_SHOOT -> player2
+            Constants.GameStates.P2_RES -> player2
+            Constants.GameStates.P1_WIN -> player1
+            Constants.GameStates.P2_WIN -> player2
         }
     }
 
-    fun saveNames() {
-        try {
-            app?.applicationContext?.openFileOutput(Constants.fileNames, Context.MODE_PRIVATE).use {
-                it?.write(player1.getName().value?.toByteArray())
-                it?.write("\n".toByteArray())
-                it?.write(player2.getName().value?.toByteArray())
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    fun step(): Int {
+        val oldState = state
+        update()
+        return when(oldState) {
+            Constants.GameStates.INIT -> R.id.action_mainFragment_to_setPlayersFragment
+            Constants.GameStates.INPUT_NAMES -> R.id.action_setPlayersFragment_to_middleScreenFragment
+            Constants.GameStates.P1_PLACE_SWITCH -> R.id.action_middleScreenFragment_to_placeShipsFragment
+            Constants.GameStates.P1_PLACE -> R.id.action_placeShipsFragment_to_middleScreenFragment
+            Constants.GameStates.P2_PLACE_SWITCH -> R.id.action_middleScreenFragment_to_placeShipsFragment
+            Constants.GameStates.P2_PLACE -> R.id.action_placeShipsFragment_to_middleScreenFragment
+            Constants.GameStates.P1_SWITCH -> R.id.action_middleScreenFragment_to_shootFragment
+            Constants.GameStates.P1_SHOOT ->
+                if (state == Constants.GameStates.P1_RES) R.id.action_shootFragment_to_resultFragment
+                else R.id.action_shootFragment_to_scoreboardFragment
+            Constants.GameStates.P1_RES -> R.id.action_resultFragment_to_middleScreenFragment
+            Constants.GameStates.P2_SWITCH -> R.id.action_middleScreenFragment_to_shootFragment
+            Constants.GameStates.P2_SHOOT ->
+                if (state == Constants.GameStates.P2_RES) R.id.action_shootFragment_to_resultFragment
+                else R.id.action_shootFragment_to_scoreboardFragment
+            Constants.GameStates.P2_RES -> R.id.action_resultFragment_to_middleScreenFragment
+            Constants.GameStates.P1_WIN -> R.id.action_scoreboardFragment_to_mainFragment
+            Constants.GameStates.P2_WIN -> R.id.action_scoreboardFragment_to_mainFragment
         }
     }
 
+    fun update() {
+        state = when(state) {
+            Constants.GameStates.INIT -> Constants.GameStates.INPUT_NAMES
+            Constants.GameStates.INPUT_NAMES -> Constants.GameStates.P1_PLACE_SWITCH
+            Constants.GameStates.P1_PLACE_SWITCH -> Constants.GameStates.P1_PLACE
+            Constants.GameStates.P1_PLACE -> Constants.GameStates.P2_PLACE_SWITCH
+            Constants.GameStates.P2_PLACE_SWITCH -> Constants.GameStates.P2_PLACE
+            Constants.GameStates.P2_PLACE -> Constants.GameStates.P1_SWITCH
+            Constants.GameStates.P1_SWITCH -> Constants.GameStates.P1_SHOOT
+            Constants.GameStates.P1_SHOOT -> if (detectWin() == -1) Constants.GameStates.P1_WIN
+                                            else Constants.GameStates.P1_RES
+            Constants.GameStates.P1_RES -> Constants.GameStates.P2_SWITCH
+            Constants.GameStates.P2_SWITCH -> Constants.GameStates.P2_SHOOT
+            Constants.GameStates.P2_SHOOT -> if (detectWin() == 1) Constants.GameStates.P2_WIN
+                                            else Constants.GameStates.P2_RES
+            Constants.GameStates.P2_RES -> Constants.GameStates.P1_SWITCH
+            Constants.GameStates.P1_WIN -> Constants.GameStates.INIT
+            Constants.GameStates.P2_WIN -> Constants.GameStates.INIT
+        }
+    }
 }

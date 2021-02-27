@@ -37,6 +37,11 @@ dependencies {
     def core_version = "1.3.2"
     def lifecycle_version = "2.2.0"
     def fragment_version = "1.2.5"
+    def navigationVersion = "2.3.0"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation "androidx.core:core-ktx:$core_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"

@@ -12,11 +12,11 @@ import com.example.battleship.utils.CellPair
 import com.example.battleship.config.Constants
 import java.io.File
 
-class Player(val app: Application?) {
+class Player() {
 
     //private var _player1Name = MutableLiveData<String>()
     private var _playerName = MutableLiveData<String>()
-    private var _board = Board(app, Constants.boardSideSize * Constants.boardSideSize)
+    private var _board = Board(Constants.boardSideSize * Constants.boardSideSize)
 
     fun getName(): LiveData<String> = _playerName
 

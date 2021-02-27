@@ -9,7 +9,7 @@ import com.example.battleship.utils.BoardArray
 import com.example.battleship.config.Constants
 import com.example.battleship.utils.CellPair
 
-class Board(val app: Application?, val size: Int) {
+class Board(val size: Int) {
 
     var selectedCellLiveData = MutableLiveData<CellPair>()
     var cellsLiveData = MutableLiveData<BoardArray>()
@@ -120,11 +120,6 @@ class Board(val app: Application?, val size: Int) {
             Constants.boardSideSize - selectedRow
 
         if (border < shipSize) {
-            Toast.makeText(
-                app?.applicationContext,
-                "Out of board",
-                Toast.LENGTH_LONG
-            ).show()
             return false
         }
 
@@ -134,11 +129,6 @@ class Board(val app: Application?, val size: Int) {
             val col = if (isHorizontal) selectedCol + i else selectedCol
 
             if (_cells[row][col].state == Constants.CellStates.SHIP) {
-                Toast.makeText(
-                    app?.applicationContext,
-                    "Other ship is there",
-                    Toast.LENGTH_LONG
-                ).show()
                 return false
             }
         }
