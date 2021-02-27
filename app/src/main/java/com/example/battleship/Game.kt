@@ -28,19 +28,18 @@ class Game() {
         // TODO
         val boardSize = player2.getBoard().cellsLiveData.value?.size ?: 0
 
-        if(getCurrPlayer() == player1) {
+        if (getCurrPlayer() == player1) {
             for (i in 0 until boardSize - 1) {
                 for (j in 0 until boardSize - 1) {
-                    if(player2.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                    if (player2.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }
             }
             return 1
-        }
-        else {
+        } else {
             for (i in 0 until boardSize - 1) {
                 for (j in 0 until boardSize - 1) {
-                    if(player1.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                    if (player1.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }
             }
