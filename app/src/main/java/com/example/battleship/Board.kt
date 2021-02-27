@@ -1,13 +1,11 @@
 package com.example.battleship
 
-import android.app.Application
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.example.battleship.utils.BoardArray
+import com.example.battleship.config.BoardArray
 import com.example.battleship.config.Constants
-import com.example.battleship.utils.CellPair
+import com.example.battleship.config.CellPair
 
 class Board(val size: Int) {
 
@@ -37,11 +35,11 @@ class Board(val size: Int) {
         cellsLiveData.postValue(cells)
     }
 
-//    fun getCell(row: Int, col: Int): Cell? {
-//        if (row < 0 || row > Constants.boardSideSize - 1) return null
-//        if (col < 0 || col > Constants.boardSideSize - 1) return null
-//        return _cells[row][col]
-//    }
+    fun getCell(row: Int, col: Int): Cell? {
+        if (row < 0 || row > Constants.boardSideSize - 1) return null
+        if (col < 0 || col > Constants.boardSideSize - 1) return null
+        return _cells[row][col]
+    }
 
     private fun copyCells(cells: BoardArray): BoardArray {
         return BoardArray(Constants.boardSideSize) { i ->

@@ -8,7 +8,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import com.example.battleship.utils.BoardArray
+import com.example.battleship.config.BoardArray
 import com.example.battleship.config.Constants
 
 // Tutorial: https://www.youtube.com/watch?v=00QdlHuKGH8&t=45s

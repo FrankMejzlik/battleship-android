@@ -13,8 +13,8 @@ import com.example.battleship.MainActivity
 import com.example.battleship.R
 import com.example.battleship.views.ShipBoardsView
 import com.example.battleship.viewModels.GameViewModel
-import com.example.battleship.utils.BoardArray
-import com.example.battleship.utils.CellPair
+import com.example.battleship.config.BoardArray
+import com.example.battleship.config.CellPair
 import com.example.battleship.config.Constants
 import kotlinx.android.synthetic.main.fragment_place_ships.*
 import java.io.Serializable

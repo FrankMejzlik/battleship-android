@@ -1,4 +1,4 @@
-package com.example.battleship.utils
+package com.example.battleship.config
 
 import com.example.battleship.Cell
 

@@ -21,9 +21,31 @@ class Game() {
         }
     }
 
+    // 1 - player 1 wins
+    // 0 - no one wins
+    // -1 - player 2 wins
     private fun detectWin(): Int {
         // TODO
-        return 1
+        val boardSize = player2.getBoard().cellsLiveData.value?.size ?: 0
+
+        if(getCurrPlayer() == player1) {
+            for (i in 0 until boardSize - 1) {
+                for (j in 0 until boardSize - 1) {
+                    if(player2.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                        return 0
+                }
+            }
+            return 1
+        }
+        else {
+            for (i in 0 until boardSize - 1) {
+                for (j in 0 until boardSize - 1) {
+                    if(player1.getBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                        return 0
+                }
+            }
+            return -1
+        }
     }
 
     fun getCurrPlayer(): Player {
@@ -79,11 +101,11 @@ class Game() {
             Constants.GameStates.P2_PLACE_SWITCH -> Constants.GameStates.P2_PLACE
             Constants.GameStates.P2_PLACE -> Constants.GameStates.P1_SWITCH
             Constants.GameStates.P1_SWITCH -> Constants.GameStates.P1_SHOOT
-            Constants.GameStates.P1_SHOOT -> if (detectWin() == -1) Constants.GameStates.P1_WIN
+            Constants.GameStates.P1_SHOOT -> if (detectWin() == 1) Constants.GameStates.P1_WIN
             else Constants.GameStates.P1_RES
             Constants.GameStates.P1_RES -> Constants.GameStates.P2_SWITCH
             Constants.GameStates.P2_SWITCH -> Constants.GameStates.P2_SHOOT
-            Constants.GameStates.P2_SHOOT -> if (detectWin() == 1) Constants.GameStates.P2_WIN
+            Constants.GameStates.P2_SHOOT -> if (detectWin() == -1) Constants.GameStates.P2_WIN
             else Constants.GameStates.P2_RES
             Constants.GameStates.P2_RES -> Constants.GameStates.P1_SWITCH
             Constants.GameStates.P1_WIN -> Constants.GameStates.INIT
