@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -46,8 +47,15 @@ class SetPlayersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_start.setOnClickListener {
-            val nextFrag = viewModel.game.step()
-            it.findNavController().navigate(nextFrag)
+            if (txt_player1.editText?.text.toString().isEmpty() || txt_player2.editText?.text.toString().isEmpty()) {
+                Toast.makeText(
+                    activity, Constants.ERR_MISSING_NAMES,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val nextFrag = viewModel.game.step()
+                it.findNavController().navigate(nextFrag)
+            }
         }
     }
 

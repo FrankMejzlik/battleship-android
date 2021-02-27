@@ -11,4 +11,5 @@
     <string name="ship_size_5">Carrier (5)</string>
     <string name="btn_main_play">Play</string>
     <string name="btn_set_players_start">Start</string>
+    <string name="hand_over"><br>Hand over \n</br> <br>the phone!</br></string>
 </resources>

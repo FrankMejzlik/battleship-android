@@ -7,25 +7,59 @@
     tools:context=".fragments.MiddleScreenFragment">
 
     <TextView
-        android:id="@+id/txt_player_name"
+        android:id="@+id/txt_hand_over"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        app:layout_constraintBottom_toTopOf="@id/btn_action"
+        android:text="@string/hand_over"
+        android:textSize="35dp"
+        android:textAllCaps="true"
+        android:textColor="@color/secondary"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@id/txt_next_player"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"/>
 
+
+    <TextView
+        android:id="@+id/txt_next_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player:"
+        android:textAllCaps="true"
+        android:textColor="@color/secondary"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@id/txt_player_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.801"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/txt_player_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAYER_NAME"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_action"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.49"
+        app:layout_constraintVertical_chainStyle="packed" />
+
     <Button
         android:id="@+id/btn_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/colorSuccess"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_player_name"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_player_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

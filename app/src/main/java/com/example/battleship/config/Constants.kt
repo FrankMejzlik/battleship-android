@@ -2,6 +2,8 @@ package com.example.battleship.config
 
 object Constants {
 
+    const val ERR_MISSING_NAMES = "Missing names."
+
     // Name of the file where names of players are stored.
     const val fileNames = "playersNames"
 
