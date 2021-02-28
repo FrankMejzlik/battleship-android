@@ -95,15 +95,6 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
     private fun updateSelectedCellUI(cell: CellPair?) = cell?.let {
         view_board.updateSelectedCellUI(cell.first, cell.second)
-        if (cell != Pair(-1, -1)) {
-            Toast.makeText(
-                activity,
-                "chosen cell is: " + viewModel.game.getCurrPlayer()
-                    ?.getMyBoard()?.selectedCellLiveData?.value?.first + ", " + viewModel.game.getCurrPlayer()
-                    ?.getMyBoard()?.selectedCellLiveData?.value?.second,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
     }
 
     override fun onCellTouched(row: Int, col: Int) {

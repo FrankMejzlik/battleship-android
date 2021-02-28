@@ -1,15 +1,16 @@
 package com.example.battleship
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.battleship.config.Constants
 
-class Player() {
+class Player(private val app: Application?) {
 
     //private var _player1Name = MutableLiveData<String>()
     private var _playerName = MutableLiveData<String>()
-    private var _myBoard = Board(Constants.boardSideSize * Constants.boardSideSize)
-    private var _shootBoard = Board(Constants.boardSideSize * Constants.boardSideSize)
+    private var _myBoard = Board( app, Constants.boardSideSize * Constants.boardSideSize)
+    private var _shootBoard = Board( app, Constants.boardSideSize * Constants.boardSideSize)
 
     fun getName(): LiveData<String> = _playerName
 

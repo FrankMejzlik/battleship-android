@@ -1,13 +1,15 @@
 package com.example.battleship
 
+import android.app.Application
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.battleship.config.BoardArray
 import com.example.battleship.config.Constants
 import com.example.battleship.config.CellPair
 
-class Board(val size: Int) {
+class Board(private val app: Application?, val size: Int) {
 
     var selectedCellLiveData = MutableLiveData<CellPair>()
     var cellsLiveData = MutableLiveData<BoardArray>()
@@ -139,6 +141,12 @@ class Board(val size: Int) {
             Constants.boardSideSize - selectedRow
 
         if (border < shipSize) {
+            Toast.makeText(
+                app?.applicationContext,
+                "Out of board",
+                Toast.LENGTH_LONG
+            ).show()
+
             return false
         }
 
@@ -148,6 +156,11 @@ class Board(val size: Int) {
             val col = if (isHorizontal) selectedCol + i else selectedCol
 
             if (_cells[row][col].state == Constants.CellStates.SHIP) {
+                Toast.makeText(
+                    app?.applicationContext,
+                    "Other ship is there",
+                    Toast.LENGTH_LONG
+                ).show()
                 return false
             }
         }

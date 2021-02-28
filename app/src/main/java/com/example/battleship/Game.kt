@@ -1,12 +1,13 @@
 package com.example.battleship
 
+import android.app.Application
 import com.example.battleship.config.Constants
 
-class Game() {
+class Game(private val app: Application?) {
     private var state = Constants.GameStates.INIT
 
-    var player1 = Player()
-    var player2 = Player()
+    var player1 = Player(app)
+    var player2 = Player(app)
 
     private var currPlayer = player1
 

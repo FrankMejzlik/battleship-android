@@ -79,6 +79,8 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_shoot.setOnClickListener {
             if(handleShoot(view)) {
+                // Reset selected cell.
+                viewModel.game.getCurrPlayer().getShootBoard().updateSelectedCell(-1, -1)
                 val nextFrag = viewModel.game.step()
                 it.findNavController().navigate(nextFrag)
             } else
