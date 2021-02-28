@@ -9,8 +9,8 @@ class Player(private val app: Application?) {
 
     //private var _player1Name = MutableLiveData<String>()
     private var _playerName = MutableLiveData<String>()
-    private var _myBoard = Board( app, Constants.boardSideSize * Constants.boardSideSize)
-    private var _shootBoard = Board( app, Constants.boardSideSize * Constants.boardSideSize)
+    private var _myBoard = Board(app, Constants.boardSideSize * Constants.boardSideSize)
+    private var _shootBoard = Board(app, Constants.boardSideSize * Constants.boardSideSize)
 
     fun getName(): LiveData<String> = _playerName
 

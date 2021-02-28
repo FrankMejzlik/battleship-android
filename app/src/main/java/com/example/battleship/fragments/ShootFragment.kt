@@ -78,7 +78,7 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_shoot.setOnClickListener {
-            if(handleShoot(view)) {
+            if (handleShoot(view)) {
                 // Reset selected cell.
                 viewModel.game.getCurrPlayer().getShootBoard().updateSelectedCell(-1, -1)
                 val nextFrag = viewModel.game.step()
@@ -91,25 +91,44 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
         }
     }
 
-    private fun handleShoot(view: View) : Boolean {
-        val selectedRow = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.first ?: 0
-        val selectedCol = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.second ?: 0
-        if(selectedRow == -1 || selectedCol == -1)
+    private fun handleShoot(view: View): Boolean {
+        val selectedRow =
+            viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.first ?: 0
+        val selectedCol =
+            viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.second ?: 0
+        if (selectedRow == -1 || selectedCol == -1)
             return false
         if (viewModel.game.getCurrPlayer() == viewModel.game.player1) {
-            updateShootCells(view, selectedRow, selectedCol, viewModel.game.getCurrPlayer(), viewModel.game.player2)
+            updateShootCells(
+                view,
+                selectedRow,
+                selectedCol,
+                viewModel.game.getCurrPlayer(),
+                viewModel.game.player2
+            )
         } else {
-            updateShootCells(view, selectedRow, selectedCol, viewModel.game.getCurrPlayer(), viewModel.game.player1)
+            updateShootCells(
+                view,
+                selectedRow,
+                selectedCol,
+                viewModel.game.getCurrPlayer(),
+                viewModel.game.player1
+            )
         }
         return true
     }
 
-    private fun updateShootCells(view: View, row: Int, col: Int, currPlayer: Player, otherPlayer: Player) {
+    private fun updateShootCells(
+        view: View,
+        row: Int,
+        col: Int,
+        currPlayer: Player,
+        otherPlayer: Player
+    ) {
         otherPlayer.getMyBoard().updateSelectedCell(row, col)
         otherPlayer.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
 
-        val state = when(otherPlayer.getMyBoard().getCell(row, col)?.state)
-        {
+        val state = when (otherPlayer.getMyBoard().getCell(row, col)?.state) {
             Constants.CellStates.HIT -> Constants.CellStates.HIT
             else -> Constants.CellStates.MISS
         }

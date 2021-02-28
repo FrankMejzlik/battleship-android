@@ -92,9 +92,11 @@ class Board(private val app: Application?, val size: Int) {
 
     private fun handleShoot() {
         val shotCell = _cells[selectedRow][selectedCol]
-        when(shotCell.state) {
-            Constants.CellStates.SHIP -> _cells[selectedRow][selectedCol].state = Constants.CellStates.HIT
-            Constants.CellStates.HIT -> _cells[selectedRow][selectedCol].state = Constants.CellStates.HIT
+        when (shotCell.state) {
+            Constants.CellStates.SHIP -> _cells[selectedRow][selectedCol].state =
+                Constants.CellStates.HIT
+            Constants.CellStates.HIT -> _cells[selectedRow][selectedCol].state =
+                Constants.CellStates.HIT
             else -> _cells[selectedRow][selectedCol].state = Constants.CellStates.MISS
         }
     }
@@ -200,7 +202,7 @@ class Board(private val app: Application?, val size: Int) {
     private fun getStartCell(isHorizontal: Boolean): Cell {
         // If current position is start of the boat, return current cell as start cell.
         val currCell = _cells[selectedRow][selectedCol]
-        if(selectedRow - 1 == -1 || selectedCol - 1 == -1) return currCell
+        if (selectedRow - 1 == -1 || selectedCol - 1 == -1) return currCell
 
         var index = 0
         while (true) {
@@ -253,10 +255,10 @@ class Board(private val app: Application?, val size: Int) {
     private fun isShipHorizontal(): Boolean {
         val currCellShip = _cells[selectedRow][selectedCol].ship
         val resLeft =
-            if(selectedCol - 1 == -1) false
+            if (selectedCol - 1 == -1) false
             else _cells[selectedRow][selectedCol - 1].ship == currCellShip
         val resRight =
-            if(selectedCol + 1 >= Constants.boardSideSize) false
+            if (selectedCol + 1 >= Constants.boardSideSize) false
             else _cells[selectedRow][selectedCol + 1].ship == currCellShip
 
         return resLeft || resRight

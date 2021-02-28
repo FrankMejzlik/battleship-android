@@ -111,18 +111,19 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                     fillCell(canvas, row, col, paint)
                 }
 
-                if(cell.state == Constants.CellStates.HIT) {
+                if (cell.state == Constants.CellStates.HIT) {
                     fillCell(canvas, row, col, shipHitPaint)
                 }
 
-                if(cell.state == Constants.CellStates.MISS) {
+                if (cell.state == Constants.CellStates.MISS) {
                     fillCell(canvas, row, col, shipMissPaint)
                 }
 
                 // Paint chosen cell.
                 if (row == selectedRow && col == selectedCol) {
-                    if (selectedRow == -1 || selectedCol == -1) {} else
-                    fillCell(canvas, row, col, selectedCellPaint)
+                    if (selectedRow == -1 || selectedCol == -1) {
+                    } else
+                        fillCell(canvas, row, col, selectedCellPaint)
                 }
             }
         }
@@ -164,7 +165,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 val row = cell.row
                 val col = cell.col
 
-                if(cell.state == Constants.CellStates.HIT) {
+                if (cell.state == Constants.CellStates.HIT) {
                     canvas.drawLine(
                         col * cellSizePixels,
                         row * cellSizePixels,

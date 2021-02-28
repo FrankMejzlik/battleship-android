@@ -54,7 +54,9 @@ class SetPlayersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_start.setOnClickListener {
-            if (txt_player1.editText?.text.toString().isEmpty() || txt_player2.editText?.text.toString().isEmpty()) {
+            if (txt_player1.editText?.text.toString()
+                    .isEmpty() || txt_player2.editText?.text.toString().isEmpty()
+            ) {
                 Toast.makeText(
                     activity, Constants.ERR_MISSING_NAMES,
                     Toast.LENGTH_SHORT
