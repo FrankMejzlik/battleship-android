@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">battleship</string>
-    <string name="hint_player1">player1name</string>
-    <string name="hint_player2">player2name</string>
+    <string name="hint_player1">Player #1 name</string>
+    <string name="hint_player2">Player #2 name</string>
     <string name="btn_place_ok">Ok</string>
     <string name="btn_ship_erase">Erase</string>
     <string name="btn_ship_rotate">Rotate</string>
