@@ -13,10 +13,7 @@ import com.example.battleship.R
 import com.example.battleship.config.BoardArray
 import com.example.battleship.config.CellPair
 import com.example.battleship.viewModels.GameViewModel
-import com.example.battleship.views.ShipBoardsView
 import kotlinx.android.synthetic.main.fragment_result.*
-import kotlinx.android.synthetic.main.fragment_scoreboard.*
-import kotlinx.android.synthetic.main.fragment_shoot.*
 
 class ResultFragment : Fragment() {
     private lateinit var viewModel: GameViewModel

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.battleship.Cell
 import com.example.battleship.MainActivity
 import com.example.battleship.Player
 import com.example.battleship.R
@@ -18,8 +17,6 @@ import com.example.battleship.config.CellPair
 import com.example.battleship.config.Constants
 import com.example.battleship.viewModels.GameViewModel
 import com.example.battleship.views.ShipBoardsView
-import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_place_ships.*
 import kotlinx.android.synthetic.main.fragment_shoot.*
 
 class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {

@@ -9,11 +9,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.battleship.MainActivity
-import com.example.battleship.config.Constants
 import com.example.battleship.R
 import com.example.battleship.viewModels.GameViewModel
 import kotlinx.android.synthetic.main.fragment_middle_screen.*
-import java.io.Serializable
 
 class MiddleScreenFragment : Fragment() {
 

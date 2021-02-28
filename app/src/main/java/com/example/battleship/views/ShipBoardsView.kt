@@ -4,14 +4,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.example.battleship.config.BoardArray
 import com.example.battleship.config.Constants
 
-// Tutorial: https://www.youtube.com/watch?v=00QdlHuKGH8&t=45s
+// Inspired by tutorial: https://www.youtube.com/watch?v=00QdlHuKGH8&t=45s
 
 class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
@@ -39,12 +38,6 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     private val selectedCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#248095")
-    }
-
-    private val textPaint = Paint().apply {
-        style = Paint.Style.FILL_AND_STROKE
-        color = Color.BLACK
-        textSize = 24F
     }
 
     private val ship2CellPaint = Paint().apply {
@@ -90,7 +83,6 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
         )
         fillCells(canvas)
         drawLines(canvas)
-        drawText(canvas)
     }
 
     private fun fillCells(canvas: Canvas) {
@@ -165,6 +157,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 val row = cell.row
                 val col = cell.col
 
+                // Draw cross.
                 if (cell.state == Constants.CellStates.HIT) {
                     canvas.drawLine(
                         col * cellSizePixels,
@@ -182,33 +175,6 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                         thinLinePaint
                     )
                 }
-
-            }
-        }
-    }
-
-    private fun drawText(canvas: Canvas) {
-        cells?.forEach { column ->
-            column.forEach { cell ->
-                val row = cell.row
-                val col = cell.col
-                val stateString = when (cell.state) {
-                    Constants.CellStates.EMPTY -> ""
-                    Constants.CellStates.HIT -> ""
-                    Constants.CellStates.MISS -> ""
-                    Constants.CellStates.SHIP -> ""
-                    else -> return
-                }
-
-                val textBounds = Rect()
-                textPaint.getTextBounds(stateString, 0, stateString.length, textBounds)
-                val textWidth = textPaint.measureText(stateString)
-                val textHeight = textBounds.height()
-
-                canvas.drawText(
-                    stateString, (col * cellSizePixels) + cellSizePixels / 2 - textWidth / 2,
-                    (row * cellSizePixels) + cellSizePixels / 2 - textHeight / 2, textPaint
-                )
 
             }
         }

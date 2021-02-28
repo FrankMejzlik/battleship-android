@@ -3,7 +3,6 @@ package com.example.battleship.viewModels
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.battleship.config.Constants
 
 class GameViewModelFactory(
     private val app: Application?

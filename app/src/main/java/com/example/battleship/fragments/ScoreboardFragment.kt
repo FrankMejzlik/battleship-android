@@ -11,8 +11,6 @@ import androidx.navigation.findNavController
 import com.example.battleship.MainActivity
 import com.example.battleship.R
 import com.example.battleship.viewModels.GameViewModel
-import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_middle_screen.*
 import kotlinx.android.synthetic.main.fragment_scoreboard.*
 
 class ScoreboardFragment : Fragment() {

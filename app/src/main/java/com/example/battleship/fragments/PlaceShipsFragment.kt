@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +16,6 @@ import com.example.battleship.config.BoardArray
 import com.example.battleship.config.CellPair
 import com.example.battleship.config.Constants
 import kotlinx.android.synthetic.main.fragment_place_ships.*
-import java.io.Serializable
 
 class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
@@ -32,15 +30,15 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
             GameViewModel::class.java
         )
 
-        viewModel.game.getCurrPlayer()?.getName()?.observe(viewLifecycleOwner, Observer {
+        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
-        viewModel.game.getCurrPlayer()?.getMyBoard()?.selectedCellLiveData?.observe(
+        viewModel.game.getCurrPlayer().getMyBoard().selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer {
                 updateSelectedCellUI(it)
             })
-        viewModel.game.getCurrPlayer()?.getMyBoard()?.cellsLiveData?.observe(
+        viewModel.game.getCurrPlayer().getMyBoard().cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
@@ -66,21 +64,21 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                         btn_two_ship -> 2
                         else -> 0
                     }
-                viewModel.game.getCurrPlayer()?.getMyBoard()
-                    ?.handleInput(it, shipSize, Constants.ShipAction.PLACE)
+                viewModel.game.getCurrPlayer().getMyBoard()
+                    .handleInput(it, shipSize, Constants.ShipAction.PLACE)
             }
         }
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer()?.getMyBoard()
-                ?.handleInput(view, 0, Constants.ShipAction.ROTATE)
+            viewModel.game.getCurrPlayer().getMyBoard()
+                .handleInput(view, 0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
         btn_erase_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer()?.getMyBoard()
-                ?.handleInput(view, 0, Constants.ShipAction.ERASE)
+            viewModel.game.getCurrPlayer().getMyBoard()
+                .handleInput(view, 0, Constants.ShipAction.ERASE)
         }
 
         btn_place_ships_ok.setOnClickListener {
@@ -98,7 +96,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     }
 
     override fun onCellTouched(row: Int, col: Int) {
-        viewModel.game.getCurrPlayer()?.getMyBoard()?.updateSelectedCell(row, col)
+        viewModel.game.getCurrPlayer().getMyBoard().updateSelectedCell(row, col)
     }
 
     override fun onStart() {

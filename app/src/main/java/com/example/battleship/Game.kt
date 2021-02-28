@@ -3,27 +3,16 @@ package com.example.battleship
 import android.app.Application
 import com.example.battleship.config.Constants
 
-class Game(private val app: Application?) {
+class Game(app: Application?) {
     private var state = Constants.GameStates.INIT
 
     var player1 = Player(app)
     var player2 = Player(app)
 
-    private var currPlayer = player1
-
-    init {
-        // If names are not filled yet in the file, use empty strings.
-        if (state == Constants.GameStates.INPUT_NAMES) {
-            player1.setName("")
-            player2.setName("")
-        }
-    }
-
     // 1 - player 1 wins
     // 0 - no one wins
     // -1 - player 2 wins
     private fun detectWin(): Int {
-        // TODO
         val boardSize = player2.getMyBoard().cellsLiveData.value?.size ?: 0
 
         if (getCurrPlayer() == player1) {
@@ -89,7 +78,7 @@ class Game(private val app: Application?) {
         }
     }
 
-    fun update() {
+    private fun update() {
         state = when (state) {
             Constants.GameStates.INIT -> Constants.GameStates.INPUT_NAMES
             Constants.GameStates.INPUT_NAMES -> Constants.GameStates.P1_PLACE_SWITCH

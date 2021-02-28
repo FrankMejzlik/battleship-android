@@ -9,7 +9,7 @@ import com.example.battleship.config.BoardArray
 import com.example.battleship.config.Constants
 import com.example.battleship.config.CellPair
 
-class Board(private val app: Application?, val size: Int) {
+class Board(private val app: Application?) {
 
     var selectedCellLiveData = MutableLiveData<CellPair>()
     var cellsLiveData = MutableLiveData<BoardArray>()
@@ -24,7 +24,6 @@ class Board(private val app: Application?, val size: Int) {
 
     // Maximum limit of ships for each type
     var maxLimit = arrayOf(4, 3, 2, 1)
-    val buttonNames = arrayOf("btn_two_ship", "btn_three_ship", "btn_four_ship", "btn_five_ship")
 
     init {
         val cells = BoardArray(Constants.boardSideSize) { i ->
