@@ -27,7 +27,7 @@
     <dimen name="btnPadding">10sp</dimen>
 
     <color  name="primary">#248095</color >
-    <color  name="secondary">@color/purple_500</color >
+    <color  name="secondary">#682495</color >
     <color  name="colorSuccess">#0F9D58</color >
     <color  name="colorAlert">#DB4437</color >
 

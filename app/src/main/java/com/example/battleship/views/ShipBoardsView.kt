@@ -38,7 +38,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
 
     private val selectedCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
-        color = Color.parseColor("#04a6cb")
+        color = Color.parseColor("#248095")
     }
 
     private val textPaint = Paint().apply {
@@ -65,6 +65,16 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     private val ship5CellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#2a2a2d")
+    }
+
+    private val shipHitPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#DB4437")
+    }
+
+    private val shipMissPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.parseColor("#96d6ed")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -99,6 +109,14 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                         else -> Paint()
                     }
                     fillCell(canvas, row, col, paint)
+                }
+
+                if(cell.state == Constants.CellStates.HIT) {
+                    fillCell(canvas, row, col, shipHitPaint)
+                }
+
+                if(cell.state == Constants.CellStates.MISS) {
+                    fillCell(canvas, row, col, shipMissPaint)
                 }
 
                 // Paint chosen cell.
@@ -140,6 +158,32 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 thinLinePaint
             )
         }
+
+        cells?.forEach { column ->
+            column.forEach { cell ->
+                val row = cell.row
+                val col = cell.col
+
+                if(cell.state == Constants.CellStates.HIT) {
+                    canvas.drawLine(
+                        col * cellSizePixels,
+                        row * cellSizePixels,
+                        col * cellSizePixels + cellSizePixels,
+                        row * cellSizePixels + cellSizePixels,
+                        thinLinePaint
+                    )
+
+                    canvas.drawLine(
+                        col * cellSizePixels + cellSizePixels,
+                        row * cellSizePixels,
+                        col * cellSizePixels,
+                        row * cellSizePixels + cellSizePixels,
+                        thinLinePaint
+                    )
+                }
+
+            }
+        }
     }
 
     private fun drawText(canvas: Canvas) {
@@ -149,8 +193,8 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 val col = cell.col
                 val stateString = when (cell.state) {
                     Constants.CellStates.EMPTY -> ""
-                    Constants.CellStates.HIT -> "X"
-                    Constants.CellStates.MISS -> "O"
+                    Constants.CellStates.HIT -> ""
+                    Constants.CellStates.MISS -> ""
                     Constants.CellStates.SHIP -> ""
                     else -> return
                 }
