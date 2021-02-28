@@ -3,6 +3,7 @@ package com.example.battleship.config
 object Constants {
 
     const val ERR_MISSING_NAMES = "Missing names."
+    const val ERR_MISSING_SHOOT_CELL = "No cell chosen."
 
     // Name of the file where names of players are stored.
     const val fileNames = "playersNames"

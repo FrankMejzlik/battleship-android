@@ -78,44 +78,28 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_shoot.setOnClickListener {
-            handleShoot(view)
-
-            val nextFrag = viewModel.game.step()
-            it.findNavController().navigate(nextFrag)
+            if(handleShoot(view)) {
+                val nextFrag = viewModel.game.step()
+                it.findNavController().navigate(nextFrag)
+            } else
+                Toast.makeText(
+                    activity, Constants.ERR_MISSING_SHOOT_CELL,
+                    Toast.LENGTH_SHORT
+                ).show()
         }
     }
 
-    private fun handleShoot(view: View) {
-        // Handle shoot.
+    private fun handleShoot(view: View) : Boolean {
         val selectedRow = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.first ?: 0
         val selectedCol = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.second ?: 0
+        if(selectedRow == -1 || selectedCol == -1)
+            return false
         if (viewModel.game.getCurrPlayer() == viewModel.game.player1) {
             updateShootCells(view, selectedRow, selectedCol, viewModel.game.getCurrPlayer(), viewModel.game.player2)
-//            viewModel.game.player2.getMyBoard().updateSelectedCell(selectedRow, selectedCol)
-//
-//            viewModel.game.player2.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
-//
-//            val state = when(viewModel.game.player2.getMyBoard().getCell(selectedRow, selectedCol)?.state)
-//            {
-//                Constants.CellStates.HIT -> Constants.CellStates.HIT
-//                else -> Constants.CellStates.MISS
-//            }
-//            viewModel.game.player1.getShootBoard().updateState(selectedRow, selectedCol, state)
-
         } else {
             updateShootCells(view, selectedRow, selectedCol, viewModel.game.getCurrPlayer(), viewModel.game.player1)
-//            viewModel.game.player1.getMyBoard().updateSelectedCell(selectedRow, selectedCol)
-//            viewModel.game.player1.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
-//
-//            val state = when(viewModel.game.player1.getMyBoard().getCell(selectedRow, selectedCol)?.state)
-//            {
-//                Constants.CellStates.HIT -> Constants.CellStates.HIT
-//                else -> Constants.CellStates.MISS
-//            }
-//            viewModel.game.player2.getShootBoard().updateState(selectedRow, selectedCol, state)
         }
-
-        //updateCells(viewModel.game.getCurrPlayer().getShootBoard().cellsLiveData.value)
+        return true
     }
 
     private fun updateShootCells(view: View, row: Int, col: Int, currPlayer: Player, otherPlayer: Player) {

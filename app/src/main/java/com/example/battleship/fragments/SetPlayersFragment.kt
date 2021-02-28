@@ -35,6 +35,13 @@ class SetPlayersFragment : Fragment() {
         viewModel.game.player2.getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(Constants.Indices.SECOND, it)
         })
+
+        // Reset boards.
+        viewModel.game.player1.getMyBoard().resetBoard()
+        viewModel.game.player1.getShootBoard().resetBoard()
+        viewModel.game.player2.getMyBoard().resetBoard()
+        viewModel.game.player2.getShootBoard().resetBoard()
+
         return inflater.inflate(R.layout.fragment_set_players, container, false)
     }
 

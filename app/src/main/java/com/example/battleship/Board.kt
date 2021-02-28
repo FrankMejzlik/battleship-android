@@ -35,6 +35,17 @@ class Board(val size: Int) {
         cellsLiveData.postValue(cells)
     }
 
+    fun resetBoard() {
+        val cells = BoardArray(Constants.boardSideSize) { i ->
+            Array(Constants.boardSideSize) { j -> Cell(i, j, Constants.CellStates.EMPTY, null) }
+        }
+
+        _cells = cells
+
+        selectedCellLiveData.postValue(Pair(-1, -1))
+        cellsLiveData.postValue(cells)
+    }
+
     fun getCell(row: Int, col: Int): Cell? {
         if (row < 0 || row > Constants.boardSideSize - 1) return null
         if (col < 0 || col > Constants.boardSideSize - 1) return null
