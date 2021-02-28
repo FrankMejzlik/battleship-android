@@ -81,6 +81,7 @@ class Board(val size: Int) {
         val shotCell = _cells[selectedRow][selectedCol]
         when(shotCell.state) {
             Constants.CellStates.SHIP -> _cells[selectedRow][selectedCol].state = Constants.CellStates.HIT
+            Constants.CellStates.HIT -> _cells[selectedRow][selectedCol].state = Constants.CellStates.HIT
             else -> _cells[selectedRow][selectedCol].state = Constants.CellStates.MISS
         }
     }
@@ -235,6 +236,11 @@ class Board(val size: Int) {
             else _cells[selectedRow][selectedCol + 1].ship == currCellShip
 
         return resLeft || resRight
+    }
+
+    fun updateState(row: Int, col: Int, state: Constants.CellStates) {
+        _cells[row][col].state = state
+        cellsLiveData.postValue(_cells)
     }
 
     fun updateSelectedCell(row: Int, col: Int) {

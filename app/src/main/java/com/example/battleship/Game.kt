@@ -26,16 +26,16 @@ class Game() {
         val boardSize = player2.getMyBoard().cellsLiveData.value?.size ?: 0
 
         if (getCurrPlayer() == player1) {
-            for (i in 0 until boardSize - 1) {
-                for (j in 0 until boardSize - 1) {
+            for (i in 0 until boardSize) {
+                for (j in 0 until boardSize) {
                     if (player2.getMyBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }
             }
             return 1
         } else {
-            for (i in 0 until boardSize - 1) {
-                for (j in 0 until boardSize - 1) {
+            for (i in 0 until boardSize) {
+                for (j in 0 until boardSize) {
                     if (player1.getMyBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }

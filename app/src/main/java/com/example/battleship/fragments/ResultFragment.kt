@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_result.*
 import kotlinx.android.synthetic.main.fragment_scoreboard.*
 import kotlinx.android.synthetic.main.fragment_shoot.*
 
-class ResultFragment : Fragment(), ShipBoardsView.OnTouchListener {
+class ResultFragment : Fragment() {
     private lateinit var viewModel: GameViewModel
 
     override fun onCreateView(
@@ -81,13 +81,7 @@ class ResultFragment : Fragment(), ShipBoardsView.OnTouchListener {
         }
     }
 
-    override fun onCellTouched(row: Int, col: Int) {
-        viewModel.game.getCurrPlayer().getShootBoard().updateSelectedCell(row, col)
-    }
-
     override fun onStart() {
         super.onStart()
-
-        view_result_shoot_board.registerListener(this)
     }
 }

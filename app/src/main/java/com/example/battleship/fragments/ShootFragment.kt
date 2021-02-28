@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.battleship.Cell
 import com.example.battleship.MainActivity
+import com.example.battleship.Player
 import com.example.battleship.R
 import com.example.battleship.config.BoardArray
 import com.example.battleship.config.CellPair
@@ -89,26 +90,44 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
         val selectedRow = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.first ?: 0
         val selectedCol = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.second ?: 0
         if (viewModel.game.getCurrPlayer() == viewModel.game.player1) {
-            viewModel.game.player2.getMyBoard().selectedCellLiveData.postValue(CellPair(selectedRow, selectedCol))
-            viewModel.game.player2.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
+            updateShootCells(view, selectedRow, selectedCol, viewModel.game.getCurrPlayer(), viewModel.game.player2)
+//            viewModel.game.player2.getMyBoard().updateSelectedCell(selectedRow, selectedCol)
+//
+//            viewModel.game.player2.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
+//
+//            val state = when(viewModel.game.player2.getMyBoard().getCell(selectedRow, selectedCol)?.state)
+//            {
+//                Constants.CellStates.HIT -> Constants.CellStates.HIT
+//                else -> Constants.CellStates.MISS
+//            }
+//            viewModel.game.player1.getShootBoard().updateState(selectedRow, selectedCol, state)
 
-            when(viewModel.game.player2.getMyBoard().getCell(selectedRow, selectedCol)?.state)
-            {
-                Constants.CellStates.HIT -> viewModel.game.player1.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.HIT
-                else -> viewModel.game.player1.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.MISS
-            }
         } else {
-            viewModel.game.player1.getMyBoard().selectedCellLiveData.postValue(CellPair(selectedRow, selectedCol))
-            viewModel.game.player1.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
-
-            when(viewModel.game.player1.getMyBoard().getCell(selectedRow, selectedCol)?.state)
-            {
-                Constants.CellStates.HIT -> viewModel.game.player2.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.HIT
-                else -> viewModel.game.player2.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.MISS
-            }
+            updateShootCells(view, selectedRow, selectedCol, viewModel.game.getCurrPlayer(), viewModel.game.player1)
+//            viewModel.game.player1.getMyBoard().updateSelectedCell(selectedRow, selectedCol)
+//            viewModel.game.player1.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
+//
+//            val state = when(viewModel.game.player1.getMyBoard().getCell(selectedRow, selectedCol)?.state)
+//            {
+//                Constants.CellStates.HIT -> Constants.CellStates.HIT
+//                else -> Constants.CellStates.MISS
+//            }
+//            viewModel.game.player2.getShootBoard().updateState(selectedRow, selectedCol, state)
         }
 
-        updateCells(viewModel.game.getCurrPlayer().getShootBoard().cellsLiveData.value)
+        //updateCells(viewModel.game.getCurrPlayer().getShootBoard().cellsLiveData.value)
+    }
+
+    private fun updateShootCells(view: View, row: Int, col: Int, currPlayer: Player, otherPlayer: Player) {
+        otherPlayer.getMyBoard().updateSelectedCell(row, col)
+        otherPlayer.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
+
+        val state = when(otherPlayer.getMyBoard().getCell(row, col)?.state)
+        {
+            Constants.CellStates.HIT -> Constants.CellStates.HIT
+            else -> Constants.CellStates.MISS
+        }
+        currPlayer.getShootBoard().updateState(row, col, state)
     }
 
     override fun onCellTouched(row: Int, col: Int) {

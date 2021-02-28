@@ -151,7 +151,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                     Constants.CellStates.EMPTY -> ""
                     Constants.CellStates.HIT -> "X"
                     Constants.CellStates.MISS -> "O"
-                    // Constants.CellStates.SHIP -> "S"
+                    Constants.CellStates.SHIP -> ""
                     else -> return
                 }
 
