@@ -42,7 +42,7 @@ object Constants {
 
     // Action of ships on the board.
     public enum class ShipAction {
-        PLACE, ROTATE, ERASE
+        PLACE, ROTATE, ERASE, SHOOT
     }
 
 }

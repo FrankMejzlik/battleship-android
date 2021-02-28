@@ -71,9 +71,18 @@ class Board(val size: Int) {
                     handleShipButtons(view, Constants.ShipAction.ERASE, size)
                 }
             }
+            Constants.ShipAction.SHOOT -> handleShoot()
         }
 
         cellsLiveData.postValue(_cells)
+    }
+
+    private fun handleShoot() {
+        val shotCell = _cells[selectedRow][selectedCol]
+        when(shotCell.state) {
+            Constants.CellStates.SHIP -> _cells[selectedRow][selectedCol].state = Constants.CellStates.HIT
+            else -> _cells[selectedRow][selectedCol].state = Constants.CellStates.MISS
+        }
     }
 
     private fun handleCounter(action: Constants.ShipAction, shipSize: Int) {

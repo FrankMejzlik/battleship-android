@@ -50,8 +50,6 @@
                 android:id="@+id/txt_place_ships_player_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:text="Sonicka hraje"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="parent"

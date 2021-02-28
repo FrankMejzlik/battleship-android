@@ -58,7 +58,7 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
     }
 
     private fun updateMySelectedCellUI() {
-        view_shoot_board.updateSelectedCellUI(-1, -1)
+        view_my_board.updateSelectedCellUI(-1, -1)
     }
 
     private fun updatePlayerName(
@@ -77,13 +77,38 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_shoot.setOnClickListener {
-            val viewModel =
-                (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
-                    GameViewModel::class.java
-                )
+            handleShoot(view)
+
             val nextFrag = viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
+    }
+
+    private fun handleShoot(view: View) {
+        // Handle shoot.
+        val selectedRow = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.first ?: 0
+        val selectedCol = viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.second ?: 0
+        if (viewModel.game.getCurrPlayer() == viewModel.game.player1) {
+            viewModel.game.player2.getMyBoard().selectedCellLiveData.postValue(CellPair(selectedRow, selectedCol))
+            viewModel.game.player2.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
+
+            when(viewModel.game.player2.getMyBoard().getCell(selectedRow, selectedCol)?.state)
+            {
+                Constants.CellStates.HIT -> viewModel.game.player1.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.HIT
+                else -> viewModel.game.player1.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.MISS
+            }
+        } else {
+            viewModel.game.player1.getMyBoard().selectedCellLiveData.postValue(CellPair(selectedRow, selectedCol))
+            viewModel.game.player1.getMyBoard().handleInput(view, 0, Constants.ShipAction.SHOOT)
+
+            when(viewModel.game.player1.getMyBoard().getCell(selectedRow, selectedCol)?.state)
+            {
+                Constants.CellStates.HIT -> viewModel.game.player2.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.HIT
+                else -> viewModel.game.player2.getShootBoard().getCell(selectedRow, selectedCol)?.state = Constants.CellStates.MISS
+            }
+        }
+
+        updateCells(viewModel.game.getCurrPlayer().getShootBoard().cellsLiveData.value)
     }
 
     override fun onCellTouched(row: Int, col: Int) {
