@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.battleship.MainActivity
 import com.example.battleship.R
 import com.example.battleship.config.BoardArray
 import com.example.battleship.config.CellPair
@@ -17,33 +16,29 @@ import kotlinx.android.synthetic.main.fragment_result.*
 
 class ResultFragment : Fragment() {
 
-    private lateinit var _viewModel: GameViewModel
+    private val viewModel: GameViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
-            GameViewModel::class.java
-        )
-
-        _viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
+        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
-        _viewModel.game.getCurrPlayer().shootBoard.selectedCellLiveData.observe(
+        viewModel.game.getCurrPlayer().shootBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer {
                 updateSelectedCellUI(it)
             })
-        _viewModel.game.getCurrPlayer().shootBoard.cellsLiveData.observe(
+        viewModel.game.getCurrPlayer().shootBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
-        _viewModel.game.getCurrPlayer().myBoard.selectedCellLiveData.observe(
+        viewModel.game.getCurrPlayer().myBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer { updateMySelectedCellUI() })
 
-        _viewModel.game.getCurrPlayer().myBoard.cellsLiveData.observe(
+        viewModel.game.getCurrPlayer().myBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateMyCells(it) })
 
@@ -74,7 +69,7 @@ class ResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_result_ok.setOnClickListener {
-            val nextFrag = _viewModel.game.step()
+            val nextFrag = viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
     }

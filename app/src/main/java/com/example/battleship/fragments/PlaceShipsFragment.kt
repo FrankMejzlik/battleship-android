@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.battleship.MainActivity
 import com.example.battleship.R
 import com.example.battleship.views.ShipBoardsView
 import com.example.battleship.viewModels.GameViewModel
@@ -21,26 +20,22 @@ import kotlinx.android.synthetic.main.fragment_place_ships.*
 
 class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
-    private lateinit var _viewModel: GameViewModel
+    private val viewModel: GameViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
-            GameViewModel::class.java
-        )
-
-        _viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
+        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
-        _viewModel.game.getCurrPlayer().myBoard.selectedCellLiveData.observe(
+        viewModel.game.getCurrPlayer().myBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer {
                 updateSelectedCellUI(it)
             })
-        _viewModel.game.getCurrPlayer().myBoard.cellsLiveData.observe(
+        viewModel.game.getCurrPlayer().myBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
@@ -73,13 +68,13 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         }
 
         btn_place_ships_ok.setOnClickListener {
-            val nextFrag = _viewModel.game.step()
+            val nextFrag = viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
     }
 
     private fun handleRotateShip() {
-        val (_, _, errMsg) = _viewModel.game.getCurrPlayer().myBoard
+        val (_, _, errMsg) = viewModel.game.getCurrPlayer().myBoard
             .handleInput(0, Constants.ShipAction.ROTATE)
 
         if (errMsg != "") {
@@ -101,7 +96,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                 else -> 0
             }
 
-        val (isExceeded, _, errMsg) = _viewModel.game.getCurrPlayer().myBoard
+        val (isExceeded, _, errMsg) = viewModel.game.getCurrPlayer().myBoard
             .handleInput(shipSize, Constants.ShipAction.PLACE)
         // Have to revert logic because true means, that the limit is exceeded and
         // therefore the button must be disabled.
@@ -117,7 +112,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     }
 
     private fun handleEraseShips() {
-        val (isExceeded, shipSize) = _viewModel.game.getCurrPlayer().myBoard
+        val (isExceeded, shipSize) = viewModel.game.getCurrPlayer().myBoard
             .handleInput(0, Constants.ShipAction.ERASE)
 
         val shipButton = when (shipSize - 2) {
@@ -142,7 +137,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     }
 
     override fun onCellTouched(row: Int, col: Int) {
-        _viewModel.game.getCurrPlayer().myBoard.updateSelectedCell(row, col)
+        viewModel.game.getCurrPlayer().myBoard.updateSelectedCell(row, col)
     }
 
     override fun onStart() {
