@@ -6,5 +6,5 @@ import com.example.battleship.Game
 
 class GameViewModel(app: Application) : AndroidViewModel(app) {
 
-    val game = Game(app)
+    val game = Game()
 }

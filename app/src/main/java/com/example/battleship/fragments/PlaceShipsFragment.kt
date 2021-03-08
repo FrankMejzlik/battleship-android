@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -56,25 +58,13 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
         shipsButtons.forEachIndexed { _, button ->
             button.setOnClickListener {
-                val shipSize =
-                    when (button) {
-                        btn_five_ship -> 5
-                        btn_four_ship -> 4
-                        btn_three_ship -> 3
-                        btn_two_ship -> 2
-                        else -> 0
-                    }
-                // Have to revert logic because true means, that the limit is exceeded and
-                // therefore the button must be disabled.
-                button.isEnabled = !viewModel.game.getCurrPlayer().getMyBoard()
-                    .handleInput(shipSize, Constants.ShipAction.PLACE).first
+                handlePlaceShip(button)
             }
         }
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer().getMyBoard()
-                .handleInput(0, Constants.ShipAction.ROTATE)
+            handleRotateShip()
         }
 
         // Set listener for erase ship button.
@@ -85,6 +75,44 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         btn_place_ships_ok.setOnClickListener {
             val nextFrag = viewModel.game.step()
             it.findNavController().navigate(nextFrag)
+        }
+    }
+
+    private fun handleRotateShip() {
+        val (_, _, errMsg) = viewModel.game.getCurrPlayer().getMyBoard()
+            .handleInput(0, Constants.ShipAction.ROTATE)
+
+        if(errMsg != "") {
+            Toast.makeText(
+                context,
+                errMsg,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun handlePlaceShip(button: Button) {
+        val shipSize =
+            when (button) {
+                btn_five_ship -> 5
+                btn_four_ship -> 4
+                btn_three_ship -> 3
+                btn_two_ship -> 2
+                else -> 0
+            }
+
+        val (isExceeded, _, errMsg) = viewModel.game.getCurrPlayer().getMyBoard()
+            .handleInput(shipSize, Constants.ShipAction.PLACE)
+        // Have to revert logic because true means, that the limit is exceeded and
+        // therefore the button must be disabled.
+        button.isEnabled = !isExceeded
+
+        if(errMsg != "") {
+            Toast.makeText(
+                context,
+                errMsg,
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 

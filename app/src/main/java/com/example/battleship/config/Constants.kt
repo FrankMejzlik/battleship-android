@@ -4,6 +4,8 @@ object Constants {
 
     const val ERR_MISSING_NAMES = "Missing names."
     const val ERR_MISSING_SHOOT_CELL = "No cell chosen."
+    const val ERR_OUT_OF_BOARD = "Out of board."
+    const val ERR_OTHER_SHIP = "Other ship is there."
 
     // Board size
     const val boardSideSize = 10
@@ -28,4 +30,8 @@ object Constants {
         PLACE, ROTATE, ERASE, SHOOT
     }
 
+    // Eroors
+    public enum class Errors {
+        OUT_OF_BOARD, OTHER_SHIP
+    }
 }

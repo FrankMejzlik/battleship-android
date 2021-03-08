@@ -1,13 +1,12 @@
 package com.example.battleship
 
-import android.app.Application
 import com.example.battleship.config.Constants
 
-class Game(app: Application?) {
+class Game() {
     private var state = Constants.GameStates.INIT
 
-    var player1 = Player(app)
-    var player2 = Player(app)
+    var player1 = Player()
+    var player2 = Player()
 
     // 1 - player 1 wins
     // 0 - no one wins
