@@ -20,32 +20,34 @@ import com.example.battleship.views.ShipBoardsView
 import kotlinx.android.synthetic.main.fragment_shoot.*
 
 class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
-    private lateinit var viewModel: GameViewModel
+
+    private lateinit var _viewModel: GameViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
             GameViewModel::class.java
         )
 
-        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
+        _viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
-        viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.observe(
+        _viewModel.game.getCurrPlayer().shootBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer {
                 updateSelectedCellUI(it)
             })
-        viewModel.game.getCurrPlayer().getShootBoard().cellsLiveData.observe(
+        _viewModel.game.getCurrPlayer().shootBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
-        viewModel.game.getCurrPlayer().getMyBoard().selectedCellLiveData.observe(
+        _viewModel.game.getCurrPlayer().myBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer { updateMySelectedCellUI() })
 
-        viewModel.game.getCurrPlayer().getMyBoard().cellsLiveData.observe(
+        _viewModel.game.getCurrPlayer().myBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateMyCells(it) })
         return inflater.inflate(R.layout.fragment_shoot, container, false)
@@ -77,8 +79,8 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
         btn_shoot.setOnClickListener {
             if (handleShoot()) {
                 // Reset selected cell.
-                viewModel.game.getCurrPlayer().getShootBoard().updateSelectedCell(-1, -1)
-                val nextFrag = viewModel.game.step()
+                _viewModel.game.getCurrPlayer().shootBoard.updateSelectedCell(-1, -1)
+                val nextFrag = _viewModel.game.step()
                 it.findNavController().navigate(nextFrag)
             } else
                 Toast.makeText(
@@ -90,24 +92,24 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
     private fun handleShoot(): Boolean {
         val selectedRow =
-            viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.first ?: 0
+            _viewModel.game.getCurrPlayer().shootBoard.selectedCellLiveData.value?.first ?: 0
         val selectedCol =
-            viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.value?.second ?: 0
+            _viewModel.game.getCurrPlayer().shootBoard.selectedCellLiveData.value?.second ?: 0
         if (selectedRow == -1 || selectedCol == -1)
             return false
-        if (viewModel.game.getCurrPlayer() == viewModel.game.player1) {
+        if (_viewModel.game.getCurrPlayer() == _viewModel.game.player1) {
             updateShootCells(
                 selectedRow,
                 selectedCol,
-                viewModel.game.getCurrPlayer(),
-                viewModel.game.player2
+                _viewModel.game.getCurrPlayer(),
+                _viewModel.game.player2
             )
         } else {
             updateShootCells(
                 selectedRow,
                 selectedCol,
-                viewModel.game.getCurrPlayer(),
-                viewModel.game.player1
+                _viewModel.game.getCurrPlayer(),
+                _viewModel.game.player1
             )
         }
         return true
@@ -119,18 +121,18 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
         currPlayer: Player,
         otherPlayer: Player
     ) {
-        otherPlayer.getMyBoard().updateSelectedCell(row, col)
-        otherPlayer.getMyBoard().handleInput(0, Constants.ShipAction.SHOOT)
+        otherPlayer.myBoard.updateSelectedCell(row, col)
+        otherPlayer.myBoard.handleInput(0, Constants.ShipAction.SHOOT)
 
-        val state = when (otherPlayer.getMyBoard().getCell(row, col)?.state) {
+        val state = when (otherPlayer.myBoard.getCell(row, col)?.state) {
             Constants.CellStates.HIT -> Constants.CellStates.HIT
             else -> Constants.CellStates.MISS
         }
-        currPlayer.getShootBoard().updateState(row, col, state)
+        currPlayer.shootBoard.updateState(row, col, state)
     }
 
     override fun onCellTouched(row: Int, col: Int) {
-        viewModel.game.getCurrPlayer().getShootBoard().updateSelectedCell(row, col)
+        _viewModel.game.getCurrPlayer().shootBoard.updateSelectedCell(row, col)
     }
 
     override fun onStart() {

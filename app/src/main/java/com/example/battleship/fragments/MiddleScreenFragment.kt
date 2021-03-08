@@ -15,18 +15,18 @@ import kotlinx.android.synthetic.main.fragment_middle_screen.*
 
 class MiddleScreenFragment : Fragment() {
 
-    private lateinit var viewModel: GameViewModel
+    private lateinit var _viewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
             GameViewModel::class.java
         )
 
-        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
+        _viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
         return inflater.inflate(R.layout.fragment_middle_screen, container, false)
@@ -46,7 +46,7 @@ class MiddleScreenFragment : Fragment() {
         btn_action.text = buttonText
 
         btn_action.setOnClickListener {
-            val nextFrag = viewModel.game.step()
+            val nextFrag = _viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
 

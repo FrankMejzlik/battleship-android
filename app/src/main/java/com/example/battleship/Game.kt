@@ -3,21 +3,24 @@ package com.example.battleship
 import com.example.battleship.config.Constants
 
 class Game() {
-    private var state = Constants.GameStates.INIT
 
     var player1 = Player()
+        private set
     var player2 = Player()
+        private set
+
+    private var _state = Constants.GameStates.INIT
 
     // 1 - player 1 wins
     // 0 - no one wins
     // -1 - player 2 wins
     private fun detectWin(): Int {
-        val boardSize = player2.getMyBoard().cellsLiveData.value?.size ?: 0
+        val boardSize = player2.myBoard.cellsLiveData.value?.size ?: 0
 
         if (getCurrPlayer() == player1) {
             for (i in 0 until boardSize) {
                 for (j in 0 until boardSize) {
-                    if (player2.getMyBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                    if (player2.myBoard.getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }
             }
@@ -25,7 +28,7 @@ class Game() {
         } else {
             for (i in 0 until boardSize) {
                 for (j in 0 until boardSize) {
-                    if (player1.getMyBoard().getCell(i, j)?.state == Constants.CellStates.SHIP)
+                    if (player1.myBoard.getCell(i, j)?.state == Constants.CellStates.SHIP)
                         return 0
                 }
             }
@@ -34,7 +37,7 @@ class Game() {
     }
 
     fun getCurrPlayer(): Player {
-        return when (state) {
+        return when (_state) {
             Constants.GameStates.INIT -> player1
             Constants.GameStates.INPUT_NAMES -> player1
             Constants.GameStates.P1_PLACE_SWITCH -> player1
@@ -53,7 +56,7 @@ class Game() {
     }
 
     fun step(): Int {
-        val oldState = state
+        val oldState = _state
         update()
         return when (oldState) {
             Constants.GameStates.INIT -> R.id.action_mainFragment_to_setPlayersFragment
@@ -64,12 +67,12 @@ class Game() {
             Constants.GameStates.P2_PLACE -> R.id.action_placeShipsFragment_to_middleScreenFragment
             Constants.GameStates.P1_SWITCH -> R.id.action_middleScreenFragment_to_shootFragment
             Constants.GameStates.P1_SHOOT ->
-                if (state == Constants.GameStates.P1_RES) R.id.action_shootFragment_to_resultFragment
+                if (_state == Constants.GameStates.P1_RES) R.id.action_shootFragment_to_resultFragment
                 else R.id.action_shootFragment_to_scoreboardFragment
             Constants.GameStates.P1_RES -> R.id.action_resultFragment_to_middleScreenFragment
             Constants.GameStates.P2_SWITCH -> R.id.action_middleScreenFragment_to_shootFragment
             Constants.GameStates.P2_SHOOT ->
-                if (state == Constants.GameStates.P2_RES) R.id.action_shootFragment_to_resultFragment
+                if (_state == Constants.GameStates.P2_RES) R.id.action_shootFragment_to_resultFragment
                 else R.id.action_shootFragment_to_scoreboardFragment
             Constants.GameStates.P2_RES -> R.id.action_resultFragment_to_middleScreenFragment
             Constants.GameStates.P1_WIN -> R.id.action_scoreboardFragment_to_mainFragment
@@ -78,7 +81,7 @@ class Game() {
     }
 
     private fun update() {
-        state = when (state) {
+        _state = when (_state) {
             Constants.GameStates.INIT -> Constants.GameStates.INPUT_NAMES
             Constants.GameStates.INPUT_NAMES -> Constants.GameStates.P1_PLACE_SWITCH
             Constants.GameStates.P1_PLACE_SWITCH -> Constants.GameStates.P1_PLACE

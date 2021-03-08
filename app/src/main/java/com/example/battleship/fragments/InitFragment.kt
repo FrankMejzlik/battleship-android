@@ -25,7 +25,7 @@ class InitFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_main_play.setOnClickListener {
             val viewModel =
-                (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+                (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
                     GameViewModel::class.java
                 )
             val nextFrag = viewModel.game.step()

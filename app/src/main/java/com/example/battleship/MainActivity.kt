@@ -7,9 +7,8 @@ import com.example.battleship.viewModels.GameViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mainViewModel: GameViewModel
-
-    fun getViewModel() = mainViewModel
+    lateinit var mainViewModel: GameViewModel
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

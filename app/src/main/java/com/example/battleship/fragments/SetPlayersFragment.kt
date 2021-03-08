@@ -18,29 +18,29 @@ import com.example.battleship.viewModels.GameViewModel
 
 class SetPlayersFragment : Fragment() {
 
-    private lateinit var viewModel: GameViewModel
+    private lateinit var _viewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
             GameViewModel::class.java
         )
 
-        viewModel.game.player1.getName().observe(viewLifecycleOwner, Observer {
+        _viewModel.game.player1.getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(Constants.Indices.FIRST, it)
         })
-        viewModel.game.player2.getName().observe(viewLifecycleOwner, Observer {
+        _viewModel.game.player2.getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(Constants.Indices.SECOND, it)
         })
 
         // Reset boards.
-        viewModel.game.player1.getMyBoard().resetBoard()
-        viewModel.game.player1.getShootBoard().resetBoard()
-        viewModel.game.player2.getMyBoard().resetBoard()
-        viewModel.game.player2.getShootBoard().resetBoard()
+        _viewModel.game.player1.myBoard.resetBoard()
+        _viewModel.game.player1.shootBoard.resetBoard()
+        _viewModel.game.player2.myBoard.resetBoard()
+        _viewModel.game.player2.shootBoard.resetBoard()
 
         return inflater.inflate(R.layout.fragment_set_players, container, false)
     }
@@ -62,7 +62,7 @@ class SetPlayersFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                val nextFrag = viewModel.game.step()
+                val nextFrag = _viewModel.game.step()
                 it.findNavController().navigate(nextFrag)
             }
         }
@@ -70,13 +70,13 @@ class SetPlayersFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.game.player1.setName(txt_player1.editText?.text.toString())
-        viewModel.game.player2.setName(txt_player2.editText?.text.toString())
+        _viewModel.game.player1.setName(txt_player1.editText?.text.toString())
+        _viewModel.game.player2.setName(txt_player2.editText?.text.toString())
     }
 
     override fun onStop() {
         super.onStop()
-        viewModel.game.player1.setName(txt_player1.editText?.text.toString())
-        viewModel.game.player2.setName(txt_player2.editText?.text.toString())
+        _viewModel.game.player1.setName(txt_player1.editText?.text.toString())
+        _viewModel.game.player2.setName(txt_player2.editText?.text.toString())
     }
 }

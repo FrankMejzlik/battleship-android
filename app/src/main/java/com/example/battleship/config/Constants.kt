@@ -21,17 +21,12 @@ object Constants {
     }
 
     // Values of cells in the board.
-    public enum class CellStates {
+    enum class CellStates {
         EMPTY, SHIP, MISS, HIT
     }
 
     // Action of ships on the board.
-    public enum class ShipAction {
+    enum class ShipAction {
         PLACE, ROTATE, ERASE, SHOOT
-    }
-
-    // Eroors
-    public enum class Errors {
-        OUT_OF_BOARD, OTHER_SHIP
     }
 }

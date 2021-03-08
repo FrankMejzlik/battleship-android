@@ -14,63 +14,63 @@ import com.example.battleship.config.Constants
 
 class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
-    private var cellSizePixels = 0F
+    private var _cellSizePixels = 0F
 
-    private var selectedRow = -1
-    private var selectedCol = -1
+    private var _selectedRow = -1
+    private var _selectedCol = -1
 
-    private var listener: OnTouchListener? = null
+    private var _listener: OnTouchListener? = null
 
-    private var cells: BoardArray? = null
+    private var _cells: BoardArray? = null
 
-    private val thickLinePaint = Paint().apply {
+    private val _thickLinePaint = Paint().apply {
         style = Paint.Style.STROKE
         color = Color.BLACK
         strokeWidth = 4F
     }
 
-    private val thinLinePaint = Paint().apply {
+    private val _thinLinePaint = Paint().apply {
         style = Paint.Style.STROKE
         color = Color.BLACK
         strokeWidth = 2F
     }
 
-    private val selectedCellPaint = Paint().apply {
+    private val _selectedCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#248095")
     }
 
-    private val ship2CellPaint = Paint().apply {
+    private val _ship2CellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#afafb5")
     }
 
-    private val ship3CellPaint = Paint().apply {
+    private val _ship3CellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#7f7f87")
     }
 
-    private val ship4CellPaint = Paint().apply {
+    private val _ship4CellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#55555a")
     }
 
-    private val ship5CellPaint = Paint().apply {
+    private val _ship5CellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#2a2a2d")
     }
 
-    private val shipHitPaint = Paint().apply {
+    private val _shipHitPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#DB4437")
     }
 
-    private val shipMissPaint = Paint().apply {
+    private val _shipMissPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.parseColor("#96d6ed")
     }
 
-    private val emptyCellPaint = Paint().apply {
+    private val _emptyCellPaint = Paint().apply {
         style = Paint.Style.FILL_AND_STROKE
         color = Color.WHITE
     }
@@ -82,7 +82,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     override fun onDraw(canvas: Canvas) {
-        cellSizePixels = Math.min(
+        _cellSizePixels = Math.min(
             (width / Constants.boardSideSize).toFloat(),
             (height / Constants.boardSideSize).toFloat()
         )
@@ -91,7 +91,7 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     private fun fillCells(canvas: Canvas) {
-        cells?.forEach { column ->
+        _cells?.forEach { column ->
             column.forEach { cell ->
                 val row = cell.row
                 val col = cell.col
@@ -100,26 +100,26 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                     // Paint cell with ship.
                     Constants.CellStates.SHIP -> {
                         val paint = when (cell.ship?.size) {
-                            2 -> ship2CellPaint
-                            3 -> ship3CellPaint
-                            4 -> ship4CellPaint
-                            5 -> ship5CellPaint
+                            2 -> _ship2CellPaint
+                            3 -> _ship3CellPaint
+                            4 -> _ship4CellPaint
+                            5 -> _ship5CellPaint
                             else -> Paint()
                         }
                         fillCell(canvas, row, col, paint)
                     }
 
-                    Constants.CellStates.HIT -> fillCell(canvas, row, col, shipHitPaint)
+                    Constants.CellStates.HIT -> fillCell(canvas, row, col, _shipHitPaint)
 
-                    Constants.CellStates.MISS -> fillCell(canvas, row, col, shipMissPaint)
+                    Constants.CellStates.MISS -> fillCell(canvas, row, col, _shipMissPaint)
 
-                    Constants.CellStates.EMPTY -> fillCell(canvas, row, col, emptyCellPaint)
+                    Constants.CellStates.EMPTY -> fillCell(canvas, row, col, _emptyCellPaint)
                 }
 
                 // Paint chosen cell.
-                if (row == selectedRow && col == selectedCol) {
-                    if (selectedRow != -1 && selectedCol != -1) {
-                        fillCell(canvas, row, col, selectedCellPaint)
+                if (row == _selectedRow && col == _selectedCol) {
+                    if (_selectedRow != -1 && _selectedCol != -1) {
+                        fillCell(canvas, row, col, _selectedCellPaint)
                     }
                 }
             }
@@ -128,36 +128,36 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
 
     private fun fillCell(canvas: Canvas, r: Int, c: Int, paint: Paint) {
         canvas.drawRect(
-            c * cellSizePixels,
-            r * cellSizePixels,
-            (c + 1) * cellSizePixels,
-            (r + 1) * cellSizePixels,
+            c * _cellSizePixels,
+            r * _cellSizePixels,
+            (c + 1) * _cellSizePixels,
+            (r + 1) * _cellSizePixels,
             paint
         )
 
     }
 
     private fun drawLines(canvas: Canvas) {
-        canvas.drawRect(0F, 0F, width.toFloat(), height.toFloat(), thickLinePaint)
+        canvas.drawRect(0F, 0F, width.toFloat(), height.toFloat(), _thickLinePaint)
 
         for (i in 1 until Constants.boardSideSize) {
             canvas.drawLine(
-                i * cellSizePixels,
+                i * _cellSizePixels,
                 0F,
-                i * cellSizePixels,
+                i * _cellSizePixels,
                 height.toFloat(),
-                thinLinePaint
+                _thinLinePaint
             )
             canvas.drawLine(
                 0F,
-                i * cellSizePixels,
+                i * _cellSizePixels,
                 width.toFloat(),
-                i * cellSizePixels,
-                thinLinePaint
+                i * _cellSizePixels,
+                _thinLinePaint
             )
         }
 
-        cells?.forEach { column ->
+        _cells?.forEach { column ->
             column.forEach { cell ->
                 val row = cell.row
                 val col = cell.col
@@ -165,19 +165,19 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 // Draw cross.
                 if (cell.state == Constants.CellStates.HIT) {
                     canvas.drawLine(
-                        col * cellSizePixels,
-                        row * cellSizePixels,
-                        col * cellSizePixels + cellSizePixels,
-                        row * cellSizePixels + cellSizePixels,
-                        thinLinePaint
+                        col * _cellSizePixels,
+                        row * _cellSizePixels,
+                        col * _cellSizePixels + _cellSizePixels,
+                        row * _cellSizePixels + _cellSizePixels,
+                        _thinLinePaint
                     )
 
                     canvas.drawLine(
-                        col * cellSizePixels + cellSizePixels,
-                        row * cellSizePixels,
-                        col * cellSizePixels,
-                        row * cellSizePixels + cellSizePixels,
-                        thinLinePaint
+                        col * _cellSizePixels + _cellSizePixels,
+                        row * _cellSizePixels,
+                        col * _cellSizePixels,
+                        row * _cellSizePixels + _cellSizePixels,
+                        _thinLinePaint
                     )
                 }
 
@@ -196,24 +196,24 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
     }
 
     private fun handleTouchEvent(x: Float, y: Float) {
-        val possibleSelectedRow = (y / cellSizePixels).toInt()
-        val possibleSelectedCol = (x / cellSizePixels).toInt()
-        listener?.onCellTouched(possibleSelectedRow, possibleSelectedCol)
+        val possibleSelectedRow = (y / _cellSizePixels).toInt()
+        val possibleSelectedCol = (x / _cellSizePixels).toInt()
+        _listener?.onCellTouched(possibleSelectedRow, possibleSelectedCol)
     }
 
     fun updateSelectedCellUI(row: Int, col: Int) {
-        selectedRow = row
-        selectedCol = col
+        _selectedRow = row
+        _selectedCol = col
         invalidate()
     }
 
     fun updateCells(cells: BoardArray) {
-        this.cells = cells
+        this._cells = cells
         invalidate()
     }
 
     fun registerListener(listener: OnTouchListener) {
-        this.listener = listener
+        this._listener = listener
     }
 
     interface OnTouchListener {

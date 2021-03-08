@@ -16,33 +16,34 @@ import com.example.battleship.viewModels.GameViewModel
 import kotlinx.android.synthetic.main.fragment_result.*
 
 class ResultFragment : Fragment() {
-    private lateinit var viewModel: GameViewModel
+
+    private lateinit var _viewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
             GameViewModel::class.java
         )
 
-        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
+        _viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
-        viewModel.game.getCurrPlayer().getShootBoard().selectedCellLiveData.observe(
+        _viewModel.game.getCurrPlayer().shootBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer {
                 updateSelectedCellUI(it)
             })
-        viewModel.game.getCurrPlayer().getShootBoard().cellsLiveData.observe(
+        _viewModel.game.getCurrPlayer().shootBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
-        viewModel.game.getCurrPlayer().getMyBoard().selectedCellLiveData.observe(
+        _viewModel.game.getCurrPlayer().myBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer { updateMySelectedCellUI() })
 
-        viewModel.game.getCurrPlayer().getMyBoard().cellsLiveData.observe(
+        _viewModel.game.getCurrPlayer().myBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateMyCells(it) })
 
@@ -73,7 +74,7 @@ class ResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_result_ok.setOnClickListener {
-            val nextFrag = viewModel.game.step()
+            val nextFrag = _viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
     }

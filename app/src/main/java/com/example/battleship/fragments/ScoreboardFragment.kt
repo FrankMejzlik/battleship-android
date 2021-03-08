@@ -14,18 +14,19 @@ import com.example.battleship.viewModels.GameViewModel
 import kotlinx.android.synthetic.main.fragment_scoreboard.*
 
 class ScoreboardFragment : Fragment() {
-    private lateinit var viewModel: GameViewModel
+
+    private lateinit var _viewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
             GameViewModel::class.java
         )
 
-        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
+        _viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
 
@@ -41,7 +42,7 @@ class ScoreboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_restart.setOnClickListener {
-            val nextFrag = viewModel.game.step()
+            val nextFrag = _viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
     }

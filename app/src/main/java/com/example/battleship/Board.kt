@@ -8,28 +8,30 @@ import com.example.battleship.config.CellPair
 class Board() {
 
     var selectedCellLiveData = MutableLiveData<CellPair>()
+        private set
     var cellsLiveData = MutableLiveData<BoardArray>()
+        private set
 
-    private var selectedRow = -1
-    private var selectedCol = -1
+    private var _selectedRow = -1
+    private var _selectedCol = -1
 
-    var cells: BoardArray
+    private var _cells: BoardArray
 
     // Counter of number of placed ships.
-    var counter = Array(4) { 0 }
+    private var _counter = Array(4) { 0 }
 
     // Maximum limit of ships for each type
-    var maxLimit = arrayOf(4, 3, 2, 1)
+    private var _maxLimit = arrayOf(4, 3, 2, 1)
 
     init {
         val initCells = BoardArray(Constants.boardSideSize) { i ->
             Array(Constants.boardSideSize) { j -> Cell(i, j, Constants.CellStates.EMPTY, null) }
         }
 
-        this.cells = initCells
+        this._cells = initCells
 
-        selectedCellLiveData.postValue(Pair(selectedRow, selectedCol))
-        cellsLiveData.postValue(cells)
+        selectedCellLiveData.postValue(Pair(_selectedRow, _selectedCol))
+        cellsLiveData.postValue(_cells)
     }
 
     fun resetBoard() {
@@ -37,7 +39,7 @@ class Board() {
             Array(Constants.boardSideSize) { j -> Cell(i, j, Constants.CellStates.EMPTY, null) }
         }
 
-        this.cells = initCells
+        this._cells = initCells
 
         selectedCellLiveData.postValue(Pair(-1, -1))
         cellsLiveData.postValue(initCells)
@@ -46,7 +48,7 @@ class Board() {
     fun getCell(row: Int, col: Int): Cell? {
         if (row < 0 || row > Constants.boardSideSize - 1) return null
         if (col < 0 || col > Constants.boardSideSize - 1) return null
-        return cells[row][col]
+        return _cells[row][col]
     }
 
     private fun copyCells(cells: BoardArray): BoardArray {
@@ -67,11 +69,11 @@ class Board() {
     fun handleInput(inputShipSize: Int, action: Constants.ShipAction): Triple<Boolean, Int, String> {
         var shipSize = inputShipSize
         var errMsg = ""
-        if (selectedRow == -1 || selectedCol == -1) return Triple(true, shipSize, errMsg)
+        if (_selectedRow == -1 || _selectedCol == -1) return Triple(true, shipSize, errMsg)
 
         var isExceeded = false
 
-        val cellState = cells[selectedRow][selectedCol].state
+        val cellState = _cells[_selectedRow][_selectedCol].state
 
         when (action) {
             Constants.ShipAction.PLACE -> {
@@ -85,7 +87,7 @@ class Board() {
             Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP) errMsg = rotateShip()
             Constants.ShipAction.ERASE -> {
                 if (cellState == Constants.CellStates.SHIP) {
-                    shipSize = cells[selectedRow][selectedCol].ship?.size ?: 0
+                    shipSize = _cells[_selectedRow][_selectedCol].ship?.size ?: 0
                     eraseShip()
                     handleCounter(Constants.ShipAction.ERASE, shipSize)
                     isExceeded = handleShipLimit(Constants.ShipAction.ERASE, shipSize)
@@ -94,25 +96,25 @@ class Board() {
             Constants.ShipAction.SHOOT -> handleShoot()
         }
 
-        cellsLiveData.postValue(cells)
+        cellsLiveData.postValue(_cells)
         return Triple(isExceeded, shipSize, errMsg)
     }
 
     private fun handleShoot() {
-        val shotCell = cells[selectedRow][selectedCol]
+        val shotCell = _cells[_selectedRow][_selectedCol]
         when (shotCell.state) {
-            Constants.CellStates.SHIP -> cells[selectedRow][selectedCol].state =
+            Constants.CellStates.SHIP -> _cells[_selectedRow][_selectedCol].state =
                 Constants.CellStates.HIT
-            Constants.CellStates.HIT -> cells[selectedRow][selectedCol].state =
+            Constants.CellStates.HIT -> _cells[_selectedRow][_selectedCol].state =
                 Constants.CellStates.HIT
-            else -> cells[selectedRow][selectedCol].state = Constants.CellStates.MISS
+            else -> _cells[_selectedRow][_selectedCol].state = Constants.CellStates.MISS
         }
     }
 
     private fun handleCounter(action: Constants.ShipAction, shipSize: Int) {
         when (action) {
-            Constants.ShipAction.PLACE -> ++counter[shipSize - 2]
-            Constants.ShipAction.ERASE -> --counter[shipSize - 2]
+            Constants.ShipAction.PLACE -> ++_counter[shipSize - 2]
+            Constants.ShipAction.ERASE -> --_counter[shipSize - 2]
             else -> return
         }
     }
@@ -127,8 +129,8 @@ class Board() {
 
         val shipIndex = shipSize - 2
         if (action == Constants.ShipAction.PLACE) {
-            if (counter[shipIndex] >= maxLimit[shipIndex]) {
-                counter[shipIndex] = maxLimit[shipIndex]
+            if (_counter[shipIndex] >= _maxLimit[shipIndex]) {
+                _counter[shipIndex] = _maxLimit[shipIndex]
                 isExceeded = true
             }
         }
@@ -144,9 +146,9 @@ class Board() {
     private fun placeShip(shipSize: Int, isHorizontal: Boolean): Pair<Boolean, String> {
         // Check if ship is not out of board.
         val border = if (isHorizontal)
-            Constants.boardSideSize - selectedCol
+            Constants.boardSideSize - _selectedCol
         else
-            Constants.boardSideSize - selectedRow
+            Constants.boardSideSize - _selectedRow
 
         if (border < shipSize) {
             return Pair(false, Constants.ERR_OUT_OF_BOARD)
@@ -154,10 +156,10 @@ class Board() {
 
         // Check if cells are occupied by other ship.
         for (i in 0 until shipSize) {
-            val row = if (isHorizontal) selectedRow else selectedRow + i
-            val col = if (isHorizontal) selectedCol + i else selectedCol
+            val row = if (isHorizontal) _selectedRow else _selectedRow + i
+            val col = if (isHorizontal) _selectedCol + i else _selectedCol
 
-            if (cells[row][col].state == Constants.CellStates.SHIP) {
+            if (_cells[row][col].state == Constants.CellStates.SHIP) {
                 return Pair(false, Constants.ERR_OTHER_SHIP)
             }
         }
@@ -165,11 +167,11 @@ class Board() {
         // Set all cells of shipSize with given state and given type of ship.
         val ship = Ship(shipSize)
         for (i in 0 until shipSize) {
-            val row = if (isHorizontal) selectedRow else selectedRow + i
-            val col = if (isHorizontal) selectedCol + i else selectedCol
+            val row = if (isHorizontal) _selectedRow else _selectedRow + i
+            val col = if (isHorizontal) _selectedCol + i else _selectedCol
             val state = Constants.CellStates.SHIP
-            cells[row][col].state = state
-            cells[row][col].ship = ship
+            _cells[row][col].state = state
+            _cells[row][col].ship = ship
         }
         return Pair(true, "")
     }
@@ -178,59 +180,59 @@ class Board() {
         val isHorizontal = isShipHorizontal()
 
         val startCell = getStartCell(isHorizontal)
-        val shipSize = cells[selectedRow][selectedCol].ship?.size ?: 0
+        val shipSize = _cells[_selectedRow][_selectedCol].ship?.size ?: 0
 
-        val oldPair = Pair(selectedRow, selectedCol)
-        selectedRow = startCell.row
-        selectedCol = startCell.col
-        val oldCells = copyCells(cells)
+        val oldPair = Pair(_selectedRow, _selectedCol)
+        _selectedRow = startCell.row
+        _selectedCol = startCell.col
+        val oldCells = copyCells(_cells)
         eraseShip()
 
         val (isSuccess, errMsg) = placeShip(shipSize, !isHorizontal)
         if (!isSuccess) {
-            cells = copyCells(oldCells)
+            _cells = copyCells(oldCells)
         }
 
-        selectedRow = oldPair.first
-        selectedCol = oldPair.second
+        _selectedRow = oldPair.first
+        _selectedCol = oldPair.second
 
         return errMsg
     }
 
     private fun getStartCell(isHorizontal: Boolean): Cell {
         // If current position is start of the boat, return current cell as start cell.
-        val currCell = cells[selectedRow][selectedCol]
+        val currCell = _cells[_selectedRow][_selectedCol]
         if (isHorizontal) {
-            if (selectedCol - 1 == -1)
+            if (_selectedCol - 1 == -1)
                 return currCell
         } else
-            if (selectedRow - 1 == -1)
+            if (_selectedRow - 1 == -1)
                 return currCell
 
         var index = 0
         var isEndOfShip = false
         while (true) {
             val row = when {
-                isHorizontal -> selectedRow
-                else -> selectedRow - index
+                isHorizontal -> _selectedRow
+                else -> _selectedRow - index
             }
 
             val col = when {
-                !isHorizontal -> selectedCol
-                else -> selectedCol - index
+                !isHorizontal -> _selectedCol
+                else -> _selectedCol - index
             }
 
             if (col == -1 || row == -1) isEndOfShip = true
 
             if (!isEndOfShip) {
-                val cell = cells[row][col]
+                val cell = _cells[row][col]
                 if (cell.ship != currCell.ship) isEndOfShip = true
             }
 
             if (isEndOfShip) {
-                val startRow = if (isHorizontal) selectedRow else selectedRow - index + 1
-                val startCol = if (isHorizontal) selectedCol - index + 1 else selectedCol
-                val startCell = cells[startRow][startCol]
+                val startRow = if (isHorizontal) _selectedRow else _selectedRow - index + 1
+                val startCol = if (isHorizontal) _selectedCol - index + 1 else _selectedCol
+                val startCell = _cells[startRow][startCol]
                 return Cell(startRow, startCol, startCell.state, startCell.ship)
             }
 
@@ -242,45 +244,45 @@ class Board() {
         val isHorizontal = isShipHorizontal()
 
         val startCell = getStartCell(isHorizontal)
-        val shipSize = cells[selectedRow][selectedCol].ship?.size ?: 0
+        val shipSize = _cells[_selectedRow][_selectedCol].ship?.size ?: 0
 
-        val oldPair = Pair(selectedRow, selectedCol)
-        selectedRow = startCell.row
-        selectedCol = startCell.col
+        val oldPair = Pair(_selectedRow, _selectedCol)
+        _selectedRow = startCell.row
+        _selectedCol = startCell.col
 
         // Clear all cells of shipSize with given state.
         for (i in 0 until shipSize) {
-            val row = if (isHorizontal) selectedRow else selectedRow + i
-            val col = if (isHorizontal) selectedCol + i else selectedCol
+            val row = if (isHorizontal) _selectedRow else _selectedRow + i
+            val col = if (isHorizontal) _selectedCol + i else _selectedCol
 
-            cells[row][col].state = Constants.CellStates.EMPTY
-            cells[row][col].ship = null
+            _cells[row][col].state = Constants.CellStates.EMPTY
+            _cells[row][col].ship = null
         }
 
-        selectedRow = oldPair.first
-        selectedCol = oldPair.second
+        _selectedRow = oldPair.first
+        _selectedCol = oldPair.second
     }
 
     private fun isShipHorizontal(): Boolean {
-        val currCellShip = cells[selectedRow][selectedCol].ship
+        val currCellShip = _cells[_selectedRow][_selectedCol].ship
         val resLeft =
-            if (selectedCol - 1 == -1) false
-            else cells[selectedRow][selectedCol - 1].ship == currCellShip
+            if (_selectedCol - 1 == -1) false
+            else _cells[_selectedRow][_selectedCol - 1].ship == currCellShip
         val resRight =
-            if (selectedCol + 1 >= Constants.boardSideSize) false
-            else cells[selectedRow][selectedCol + 1].ship == currCellShip
+            if (_selectedCol + 1 >= Constants.boardSideSize) false
+            else _cells[_selectedRow][_selectedCol + 1].ship == currCellShip
 
         return resLeft || resRight
     }
 
     fun updateState(row: Int, col: Int, state: Constants.CellStates) {
-        cells[row][col].state = state
-        cellsLiveData.postValue(cells)
+        _cells[row][col].state = state
+        cellsLiveData.postValue(_cells)
     }
 
     fun updateSelectedCell(row: Int, col: Int) {
-        selectedRow = row
-        selectedCol = col
+        _selectedRow = row
+        _selectedCol = col
         selectedCellLiveData.postValue(Pair(row, col))
     }
 }

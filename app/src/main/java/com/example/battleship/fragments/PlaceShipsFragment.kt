@@ -21,26 +21,26 @@ import kotlinx.android.synthetic.main.fragment_place_ships.*
 
 class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
 
-    private lateinit var viewModel: GameViewModel
+    private lateinit var _viewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = (activity as? MainActivity)?.getViewModel() ?: ViewModelProvider(this).get(
+        _viewModel = (activity as? MainActivity)?.mainViewModel ?: ViewModelProvider(this).get(
             GameViewModel::class.java
         )
 
-        viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
+        _viewModel.game.getCurrPlayer().getName().observe(viewLifecycleOwner, Observer {
             updatePlayerName(it)
         })
-        viewModel.game.getCurrPlayer().getMyBoard().selectedCellLiveData.observe(
+        _viewModel.game.getCurrPlayer().myBoard.selectedCellLiveData.observe(
             viewLifecycleOwner,
             Observer {
                 updateSelectedCellUI(it)
             })
-        viewModel.game.getCurrPlayer().getMyBoard().cellsLiveData.observe(
+        _viewModel.game.getCurrPlayer().myBoard.cellsLiveData.observe(
             viewLifecycleOwner,
             Observer { updateCells(it) })
         return inflater.inflate(R.layout.fragment_place_ships, container, false)
@@ -73,13 +73,13 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         }
 
         btn_place_ships_ok.setOnClickListener {
-            val nextFrag = viewModel.game.step()
+            val nextFrag = _viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
     }
 
     private fun handleRotateShip() {
-        val (_, _, errMsg) = viewModel.game.getCurrPlayer().getMyBoard()
+        val (_, _, errMsg) = _viewModel.game.getCurrPlayer().myBoard
             .handleInput(0, Constants.ShipAction.ROTATE)
 
         if(errMsg != "") {
@@ -101,7 +101,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                 else -> 0
             }
 
-        val (isExceeded, _, errMsg) = viewModel.game.getCurrPlayer().getMyBoard()
+        val (isExceeded, _, errMsg) = _viewModel.game.getCurrPlayer().myBoard
             .handleInput(shipSize, Constants.ShipAction.PLACE)
         // Have to revert logic because true means, that the limit is exceeded and
         // therefore the button must be disabled.
@@ -117,7 +117,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     }
 
     private fun handleEraseShips() {
-        val (isExceeded, shipSize) = viewModel.game.getCurrPlayer().getMyBoard()
+        val (isExceeded, shipSize) = _viewModel.game.getCurrPlayer().myBoard
             .handleInput(0, Constants.ShipAction.ERASE)
 
         val shipButton = when (shipSize - 2) {
@@ -142,7 +142,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     }
 
     override fun onCellTouched(row: Int, col: Int) {
-        viewModel.game.getCurrPlayer().getMyBoard().updateSelectedCell(row, col)
+        _viewModel.game.getCurrPlayer().myBoard.updateSelectedCell(row, col)
     }
 
     override fun onStart() {
