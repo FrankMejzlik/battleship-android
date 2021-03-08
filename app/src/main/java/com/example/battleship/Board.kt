@@ -201,9 +201,15 @@ class Board(private val app: Application?) {
     private fun getStartCell(isHorizontal: Boolean): Cell {
         // If current position is start of the boat, return current cell as start cell.
         val currCell = _cells[selectedRow][selectedCol]
-        if (selectedRow - 1 == -1 || selectedCol - 1 == -1) return currCell
+        if (isHorizontal) {
+            if (selectedCol - 1 == -1)
+                return currCell
+        } else
+            if (selectedRow - 1 == -1)
+                return currCell
 
         var index = 0
+        var isEndOfShip = false
         while (true) {
             val row = when {
                 isHorizontal -> selectedRow
@@ -215,9 +221,14 @@ class Board(private val app: Application?) {
                 else -> selectedCol - index
             }
 
-            val cell = _cells[row][col]
+            if (col == -1 || row == -1) isEndOfShip = true
 
-            if (cell.ship != currCell.ship) {
+            if (!isEndOfShip) {
+                val cell = _cells[row][col]
+                if (cell.ship != currCell.ship) isEndOfShip = true
+            }
+
+            if (isEndOfShip) {
                 val startRow = if (isHorizontal) selectedRow else selectedRow - index + 1
                 val startCol = if (isHorizontal) selectedCol - index + 1 else selectedCol
                 val startCell = _cells[startRow][startCol]
