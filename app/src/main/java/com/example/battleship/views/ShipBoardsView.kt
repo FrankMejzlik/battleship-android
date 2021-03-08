@@ -70,6 +70,11 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
         color = Color.parseColor("#96d6ed")
     }
 
+    private val emptyCellPaint = Paint().apply {
+        style = Paint.Style.FILL_AND_STROKE
+        color = Color.WHITE
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val sizePixels = Math.min(widthMeasureSpec, heightMeasureSpec)
@@ -91,31 +96,31 @@ class ShipBoardsView(context: Context, attributeSet: AttributeSet) : View(contex
                 val row = cell.row
                 val col = cell.col
 
-                // Paint cell with ship.
-                if (cell.state == Constants.CellStates.SHIP) {
-                    val paint = when (cell.ship?.size) {
-                        2 -> ship2CellPaint
-                        3 -> ship3CellPaint
-                        4 -> ship4CellPaint
-                        5 -> ship5CellPaint
-                        else -> Paint()
+                when (cell.state) {
+                    // Paint cell with ship.
+                    Constants.CellStates.SHIP -> {
+                        val paint = when (cell.ship?.size) {
+                            2 -> ship2CellPaint
+                            3 -> ship3CellPaint
+                            4 -> ship4CellPaint
+                            5 -> ship5CellPaint
+                            else -> Paint()
+                        }
+                        fillCell(canvas, row, col, paint)
                     }
-                    fillCell(canvas, row, col, paint)
-                }
 
-                if (cell.state == Constants.CellStates.HIT) {
-                    fillCell(canvas, row, col, shipHitPaint)
-                }
+                    Constants.CellStates.HIT -> fillCell(canvas, row, col, shipHitPaint)
 
-                if (cell.state == Constants.CellStates.MISS) {
-                    fillCell(canvas, row, col, shipMissPaint)
+                    Constants.CellStates.MISS -> fillCell(canvas, row, col, shipMissPaint)
+
+                    Constants.CellStates.EMPTY -> fillCell(canvas, row, col, emptyCellPaint)
                 }
 
                 // Paint chosen cell.
                 if (row == selectedRow && col == selectedCol) {
-                    if (selectedRow == -1 || selectedCol == -1) {
-                    } else
+                    if (selectedRow != -1 && selectedCol != -1) {
                         fillCell(canvas, row, col, selectedCellPaint)
+                    }
                 }
             }
         }

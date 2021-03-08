@@ -120,7 +120,7 @@ class ShootFragment : Fragment(), ShipBoardsView.OnTouchListener {
         otherPlayer: Player
     ) {
         otherPlayer.getMyBoard().updateSelectedCell(row, col)
-        otherPlayer.getMyBoard().handleInput( 0, Constants.ShipAction.SHOOT)
+        otherPlayer.getMyBoard().handleInput(0, Constants.ShipAction.SHOOT)
 
         val state = when (otherPlayer.getMyBoard().getCell(row, col)?.state) {
             Constants.CellStates.HIT -> Constants.CellStates.HIT

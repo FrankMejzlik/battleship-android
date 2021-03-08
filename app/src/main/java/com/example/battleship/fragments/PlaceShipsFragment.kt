@@ -74,7 +74,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
             viewModel.game.getCurrPlayer().getMyBoard()
-                .handleInput( 0, Constants.ShipAction.ROTATE)
+                .handleInput(0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
@@ -89,8 +89,8 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
     }
 
     private fun handleEraseShips() {
-        val (isExceeded, shipSize)  = viewModel.game.getCurrPlayer().getMyBoard()
-            .handleInput( 0, Constants.ShipAction.ERASE)
+        val (isExceeded, shipSize) = viewModel.game.getCurrPlayer().getMyBoard()
+            .handleInput(0, Constants.ShipAction.ERASE)
 
         val shipButton = when (shipSize - 2) {
             0 -> btn_two_ship

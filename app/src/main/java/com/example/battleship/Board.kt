@@ -65,7 +65,7 @@ class Board(private val app: Application?) {
     * false if max limit of the placed ships is not exceeded
     * and size of ship.
     * */
-    fun handleInput(inputShipSize: Int, action: Constants.ShipAction) : Pair<Boolean, Int> {
+    fun handleInput(inputShipSize: Int, action: Constants.ShipAction): Pair<Boolean, Int> {
         var shipSize = inputShipSize
         if (selectedRow == -1 || selectedCol == -1) return Pair(true, shipSize)
 
@@ -77,7 +77,7 @@ class Board(private val app: Application?) {
             Constants.ShipAction.PLACE -> {
                 if (placeShip(shipSize, true)) {
                     handleCounter(Constants.ShipAction.PLACE, shipSize)
-                    isExceeded  = handleShipLimit(Constants.ShipAction.PLACE, shipSize)
+                    isExceeded = handleShipLimit(Constants.ShipAction.PLACE, shipSize)
                 }
 
             }
@@ -121,7 +121,7 @@ class Board(private val app: Application?) {
     * true if max limit of the placed ships is exceeded
     * false if max limit of the placed ships is not exceeded
     * */
-    private fun handleShipLimit(action: Constants.ShipAction, shipSize: Int) : Boolean {
+    private fun handleShipLimit(action: Constants.ShipAction, shipSize: Int): Boolean {
         var isExceeded = false
 
         val shipIndex = shipSize - 2
