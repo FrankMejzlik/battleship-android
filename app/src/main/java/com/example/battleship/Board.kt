@@ -51,12 +51,15 @@ class Board() {
         return _cells[row][col]
     }
 
-    private fun copyCells(cells: BoardArray): BoardArray {
-        return BoardArray(Constants.boardSideSize) { i ->
-            Array(Constants.boardSideSize) { j ->
-                Cell(i, j, cells[i][j].state, cells[i][j].ship)
-            }
-        }
+    fun updateState(row: Int, col: Int, state: Constants.CellStates) {
+        _cells[row][col].state = state
+        cellsLiveData.postValue(_cells)
+    }
+
+    fun updateSelectedCell(row: Int, col: Int) {
+        _selectedRow = row
+        _selectedCol = col
+        selectedCellLiveData.postValue(Pair(row, col))
     }
 
     /*
@@ -279,14 +282,11 @@ class Board() {
         return resLeft || resRight
     }
 
-    fun updateState(row: Int, col: Int, state: Constants.CellStates) {
-        _cells[row][col].state = state
-        cellsLiveData.postValue(_cells)
-    }
-
-    fun updateSelectedCell(row: Int, col: Int) {
-        _selectedRow = row
-        _selectedCol = col
-        selectedCellLiveData.postValue(Pair(row, col))
+    private fun copyCells(cells: BoardArray): BoardArray {
+        return BoardArray(Constants.boardSideSize) { i ->
+            Array(Constants.boardSideSize) { j ->
+                Cell(i, j, cells[i][j].state, cells[i][j].ship)
+            }
+        }
     }
 }
