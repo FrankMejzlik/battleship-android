@@ -1,8 +1,6 @@
 package com.example.battleship
 
 import android.app.Application
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.battleship.config.BoardArray
@@ -61,8 +59,17 @@ class Board(private val app: Application?) {
         }
     }
 
-    fun handleInput(view: View, shipSize: Int, action: Constants.ShipAction) {
-        if (selectedRow == -1 || selectedCol == -1) return
+    /*
+    * Returns:
+    * true if max limit of the placed ships is exceeded
+    * false if max limit of the placed ships is not exceeded
+    * and size of ship.
+    * */
+    fun handleInput(inputShipSize: Int, action: Constants.ShipAction) : Pair<Boolean, Int> {
+        var shipSize = inputShipSize
+        if (selectedRow == -1 || selectedCol == -1) return Pair(true, shipSize)
+
+        var isExceeded = false
 
         val cellState = _cells[selectedRow][selectedCol].state
 
@@ -70,23 +77,24 @@ class Board(private val app: Application?) {
             Constants.ShipAction.PLACE -> {
                 if (placeShip(shipSize, true)) {
                     handleCounter(Constants.ShipAction.PLACE, shipSize)
-                    handleShipButtons(view, Constants.ShipAction.PLACE, shipSize)
+                    isExceeded  = handleShipLimit(Constants.ShipAction.PLACE, shipSize)
                 }
 
             }
             Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP) rotateShip()
             Constants.ShipAction.ERASE -> {
                 if (cellState == Constants.CellStates.SHIP) {
-                    val size = _cells[selectedRow][selectedCol].ship?.size ?: 0
+                    shipSize = _cells[selectedRow][selectedCol].ship?.size ?: 0
                     eraseShip()
-                    handleCounter(Constants.ShipAction.ERASE, size)
-                    handleShipButtons(view, Constants.ShipAction.ERASE, size)
+                    handleCounter(Constants.ShipAction.ERASE, shipSize)
+                    isExceeded = handleShipLimit(Constants.ShipAction.ERASE, shipSize)
                 }
             }
             Constants.ShipAction.SHOOT -> handleShoot()
         }
 
         cellsLiveData.postValue(_cells)
+        return Pair(isExceeded, shipSize)
     }
 
     private fun handleShoot() {
@@ -108,30 +116,23 @@ class Board(private val app: Application?) {
         }
     }
 
-    private fun handleShipButtons(view: View, action: Constants.ShipAction, shipSize: Int) {
-        var disableButton = false
+    /*
+    * Returns:
+    * true if max limit of the placed ships is exceeded
+    * false if max limit of the placed ships is not exceeded
+    * */
+    private fun handleShipLimit(action: Constants.ShipAction, shipSize: Int) : Boolean {
+        var isExceeded = false
 
         val shipIndex = shipSize - 2
         if (action == Constants.ShipAction.PLACE) {
             if (counter[shipIndex] >= maxLimit[shipIndex]) {
                 counter[shipIndex] = maxLimit[shipIndex]
-                disableButton = true
+                isExceeded = true
             }
         }
 
-        val shipButton = when (shipIndex) {
-            0 -> R.id.btn_two_ship
-            1 -> R.id.btn_three_ship
-            2 -> R.id.btn_four_ship
-            3 -> R.id.btn_five_ship
-            else -> return
-        }
-        val isEnabled = view.findViewById<Button>(shipButton).isEnabled
-
-        if (disableButton) {
-            if (isEnabled) view.findViewById<Button>(shipButton).isEnabled = false
-        } else
-            if (!isEnabled) view.findViewById<Button>(shipButton).isEnabled = true
+        return isExceeded
     }
 
     private fun placeShip(shipSize: Int, isHorizontal: Boolean): Boolean {

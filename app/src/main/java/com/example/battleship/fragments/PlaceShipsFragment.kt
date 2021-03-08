@@ -64,27 +64,45 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
                         btn_two_ship -> 2
                         else -> 0
                     }
-                viewModel.game.getCurrPlayer().getMyBoard()
-                    .handleInput(it, shipSize, Constants.ShipAction.PLACE)
+                // Have to revert logic because true means, that the limit is exceeded and
+                // therefore the button must be disabled.
+                button.isEnabled = !viewModel.game.getCurrPlayer().getMyBoard()
+                    .handleInput(shipSize, Constants.ShipAction.PLACE).first
             }
         }
 
         // Set listener for rotate ship button.
         btn_rotate_ship.setOnClickListener {
             viewModel.game.getCurrPlayer().getMyBoard()
-                .handleInput(view, 0, Constants.ShipAction.ROTATE)
+                .handleInput( 0, Constants.ShipAction.ROTATE)
         }
 
         // Set listener for erase ship button.
         btn_erase_ship.setOnClickListener {
-            viewModel.game.getCurrPlayer().getMyBoard()
-                .handleInput(view, 0, Constants.ShipAction.ERASE)
+            handleEraseShips()
         }
 
         btn_place_ships_ok.setOnClickListener {
             val nextFrag = viewModel.game.step()
             it.findNavController().navigate(nextFrag)
         }
+    }
+
+    private fun handleEraseShips() {
+        val (isExceeded, shipSize)  = viewModel.game.getCurrPlayer().getMyBoard()
+            .handleInput( 0, Constants.ShipAction.ERASE)
+
+        val shipButton = when (shipSize - 2) {
+            0 -> btn_two_ship
+            1 -> btn_three_ship
+            2 -> btn_four_ship
+            3 -> btn_five_ship
+            else -> return
+        }
+
+        // Have to revert logic because true means, that the limit is exceeded and
+        // therefore the button must be disabled.
+        shipButton.isEnabled = !isExceeded
     }
 
     private fun updateCells(cells: BoardArray?) = cells?.let {
