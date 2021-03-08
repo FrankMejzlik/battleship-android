@@ -66,7 +66,10 @@ class Board() {
     * -size of ship
     * -error message while placing ship
     * */
-    fun handleInput(inputShipSize: Int, action: Constants.ShipAction): Triple<Boolean, Int, String> {
+    fun handleInput(
+        inputShipSize: Int,
+        action: Constants.ShipAction
+    ): Triple<Boolean, Int, String> {
         var shipSize = inputShipSize
         var errMsg = ""
         if (_selectedRow == -1 || _selectedCol == -1) return Triple(true, shipSize, errMsg)
@@ -84,7 +87,8 @@ class Board() {
                 } else errMsg = errorMessage
 
             }
-            Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP) errMsg = rotateShip()
+            Constants.ShipAction.ROTATE -> if (cellState == Constants.CellStates.SHIP) errMsg =
+                rotateShip()
             Constants.ShipAction.ERASE -> {
                 if (cellState == Constants.CellStates.SHIP) {
                     shipSize = _cells[_selectedRow][_selectedCol].ship?.size ?: 0

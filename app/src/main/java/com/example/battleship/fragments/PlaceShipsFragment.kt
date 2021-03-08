@@ -82,7 +82,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         val (_, _, errMsg) = _viewModel.game.getCurrPlayer().myBoard
             .handleInput(0, Constants.ShipAction.ROTATE)
 
-        if(errMsg != "") {
+        if (errMsg != "") {
             Toast.makeText(
                 context,
                 errMsg,
@@ -107,7 +107,7 @@ class PlaceShipsFragment : Fragment(), ShipBoardsView.OnTouchListener {
         // therefore the button must be disabled.
         button.isEnabled = !isExceeded
 
-        if(errMsg != "") {
+        if (errMsg != "") {
             Toast.makeText(
                 context,
                 errMsg,
