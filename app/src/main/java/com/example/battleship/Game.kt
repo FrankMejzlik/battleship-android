@@ -11,6 +11,13 @@ class Game() {
 
     private var _state = Constants.GameStates.INIT
 
+    fun resetBoards() {
+        player1.myBoard.resetBoard()
+        player1.shootBoard.resetBoard()
+        player2.myBoard.resetBoard()
+        player2.shootBoard.resetBoard()
+    }
+
     // 1 - player 1 wins
     // 0 - no one wins
     // -1 - player 2 wins

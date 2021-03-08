@@ -37,10 +37,7 @@ class SetPlayersFragment : Fragment() {
         })
 
         // Reset boards.
-        _viewModel.game.player1.myBoard.resetBoard()
-        _viewModel.game.player1.shootBoard.resetBoard()
-        _viewModel.game.player2.myBoard.resetBoard()
-        _viewModel.game.player2.shootBoard.resetBoard()
+        _viewModel.game.resetBoards()
 
         return inflater.inflate(R.layout.fragment_set_players, container, false)
     }
